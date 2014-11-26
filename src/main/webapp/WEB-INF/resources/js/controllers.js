@@ -1,7 +1,7 @@
 /**
  * 
  */
-var phonecatApp = angular.module('phonecatApp', [ 'ngRoute', 'phonecatControllers' ]);
+var phonecatApp = angular.module('phonecatApp', [ 'ngRoute', 'phonecatControllers', 'phonecatServices' ]);
 
 phonecatApp.config([ '$routeProvider', function($routeProvider) {
 
@@ -19,12 +19,9 @@ phonecatApp.config([ '$routeProvider', function($routeProvider) {
 
 var phonecatControllers = angular.module('phonecatControllers', []);
 
-phonecatControllers.controller('PhoneListCtrl', [ '$scope','$http', function($scope, $http) {
+phonecatControllers.controller('PhoneListCtrl', [ '$scope','$http', 'PhoneREST', function($scope, $http, phoneRest) {
 
-    $http.get('api/v1/datas').success(function(data) {
-        $scope.phones = data;
-      });
-    
+    $scope.phones = phoneRest.query();    
     $scope.orderProp = 'age';
 } ]);
 
@@ -32,3 +29,13 @@ phonecatControllers.controller('PhoneDetailCtrl', [ '$scope', '$routeParams', fu
 
     $scope.phoneId = $routeParams.phoneId;
 } ]);
+
+
+
+var phonecatServices = angular.module('phonecatServices', ['ngResource']);
+
+phonecatServices.factory('PhoneREST', ['$resource', function($resource){
+    return $resource('api/v1/datas', {}, {
+      query: {method:'GET', params:{}, isArray:true}
+    });
+  }]);
