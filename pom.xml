@@ -9,13 +9,13 @@
     </parent>
     
     <artifactId>base.web</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5-SNAPSHOT</version>
     <name>Base Web Application</name>
     
     <licenses>
         <license>
-            <name>The MIT License (MIT)</name>
-            <url>http://opensource.org/licenses/MIT</url>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
@@ -145,9 +145,9 @@
 
     <properties>
 
-        <base.tests.version>0.0.1-SNAPSHOT</base.tests.version>
-        <base.facade.version>0.0.1-SNAPSHOT</base.facade.version>
-        <base.services.version>0.0.1-SNAPSHOT</base.services.version>
+        <base.tests.version>0.5-SNAPSHOT</base.tests.version>
+        <base.facade.version>0.5-SNAPSHOT</base.facade.version>
+        <base.services.version>0.5-SNAPSHOT</base.services.version>
         
     </properties>
     

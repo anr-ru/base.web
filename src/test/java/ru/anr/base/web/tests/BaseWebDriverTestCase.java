@@ -6,7 +6,7 @@ package ru.anr.base.web.tests;
 import org.junit.Ignore;
 import org.junit.Rule;
 
-import ru.anr.base.facade.tests.AbstractGlassfishWebTestCase;
+import ru.anr.base.tests.AbstractGlassfishWebTestCase;
 
 import com.codeborne.selenide.junit.ScreenShooter;
 
