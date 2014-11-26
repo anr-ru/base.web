@@ -9,6 +9,7 @@
     </parent>
     
     <artifactId>base.web</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <name>Base Web Application</name>
     
     <licenses>
@@ -49,18 +50,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <!--  -->
+                    <!-- A workaround to make Glassfish compile JSP when running from Maven
+                         see: https://java.net/jira/browse/GLASSFISH-20721  -->
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>                            
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                  <path>/</path>
-                </configuration>
-            </plugin>                    
         </plugins>
     </build>
 
@@ -128,23 +122,22 @@
             <version>${base.facade.version}</version>
             <scope>test</scope>
             <classifier>tests</classifier>
-        </dependency>           
+        </dependency>
+        <!-- Selenium WebDriver extension -->           
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
-            <version>2.15</version>
             <scope>test</scope>
         </dependency>        
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>18.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- Jasmine Runner from JUnit tests -->
         <dependency>
             <groupId>de.helwich.junit</groupId>
             <artifactId>junit-jasmine-runner</artifactId>
-            <version>0.1.1</version>
             <scope>test</scope>
         </dependency>
         
