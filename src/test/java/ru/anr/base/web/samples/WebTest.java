@@ -7,16 +7,14 @@ import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.springframework.test.context.ContextConfiguration;
 
-import ru.anr.base.facade.tests.AbstractGlassfishWebTestCase;
+import ru.anr.base.web.tests.BaseWebDriverTestCase;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.junit.ScreenShooter;
 
 /**
  * Sample JUnit test for demonstrating WebDriver extension Selenide.
@@ -27,7 +25,7 @@ import com.codeborne.selenide.junit.ScreenShooter;
  *
  */
 @ContextConfiguration(classes = WebTest.class)
-public class WebTest extends AbstractGlassfishWebTestCase {
+public class WebTest extends BaseWebDriverTestCase {
 
     /**
      * By removing @ignore annotation is's possible to load Glassfish instance.
@@ -42,12 +40,6 @@ public class WebTest extends AbstractGlassfishWebTestCase {
         byte[] x = new byte[1000];
         System.in.read(x);
     }
-
-    /**
-     * JUnit test rule for browser screenshots
-     */
-    @Rule
-    public ScreenShooter shots = ScreenShooter.failedTests().to("target/screenshots").succeededTests();
 
     /**
      * Use case: loading a main page and checking localization and absence of
