@@ -4,12 +4,11 @@
     
     <parent>
         <groupId>ru.anr</groupId>
-        <artifactId>config.java</artifactId>
-        <version>0.9-SNAPSHOT</version>
+        <artifactId>base.platform.parent</artifactId>
+        <version>0.5-SNAPSHOT</version>
     </parent>
     
     <artifactId>base.web</artifactId>
-    <version>0.5-SNAPSHOT</version>
     <name>Base Web Application</name>
     
     <licenses>
@@ -37,11 +36,9 @@
                             <goal>test-jar</goal>
                         </goals>
                         <configuration>
-                            <forceCreation>true</forceCreation>
                             <includes>
                                 <include>**/*TestCase*</include>
                             </includes>
-                            <skip>false</skip>
                         </configuration>
                     </execution>
                 </executions>
@@ -49,29 +46,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <!-- A workaround to make Glassfish compile JSP when running from Maven
-                         see: https://java.net/jira/browse/GLASSFISH-20721  -->
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
             </plugin>                            
         </plugins>
     </build>
 
-
     <dependencies>    
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -82,10 +61,6 @@
         </dependency>
         
         <!-- TESTS -->        
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -100,12 +75,10 @@
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.services</artifactId>
-            <version>${base.services.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.facade</artifactId>
-            <version>${base.facade.version}</version>
             <scope>test</scope>
         </dependency>
           
@@ -113,13 +86,10 @@
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.tests</artifactId>
-            <version>${base.tests.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.facade</artifactId>
-            <version>${base.facade.version}</version>
-            <scope>test</scope>
             <classifier>tests</classifier>
         </dependency>
         <!-- Selenium WebDriver extension -->           
@@ -141,13 +111,5 @@
         </dependency>
         
     </dependencies>
-
-    <properties>
-
-        <base.tests.version>0.5-SNAPSHOT</base.tests.version>
-        <base.facade.version>0.5-SNAPSHOT</base.facade.version>
-        <base.services.version>0.5-SNAPSHOT</base.services.version>
-        
-    </properties>
     
 </project>
