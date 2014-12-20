@@ -44,6 +44,11 @@ public class MvcConfig {
     private String templatesRoot = "/WEB-INF/";
 
     /**
+     * Templates suffix
+     */
+    private String suffix = ".html";
+
+    /**
      * Defining a ViewResolver bean
      * 
      * @return Bean instance
@@ -59,7 +64,7 @@ public class MvcConfig {
             r.setPrefix(templatesRoot);
         }
 
-        r.setSuffix(".html");
+        r.setSuffix(suffix);
         return r;
     }
 
@@ -102,5 +107,14 @@ public class MvcConfig {
     public void setTemplatesRoot(String templatesRoot) {
 
         this.templatesRoot = templatesRoot;
+    }
+
+    /**
+     * @param suffix
+     *            the suffix to set
+     */
+    public void setSuffix(String suffix) {
+
+        this.suffix = suffix;
     }
 }
