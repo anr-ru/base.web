@@ -23,8 +23,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 /**
  * Configuration for MVC projects. Exports some beans for template and locale
@@ -54,9 +54,9 @@ public class MvcConfig {
      * @return Bean instance
      */
     @Bean
-    public UrlBasedViewResolver viewResolver() {
+    public InternalResourceViewResolver viewResolver() {
 
-        UrlBasedViewResolver r = new UrlBasedViewResolver();
+        InternalResourceViewResolver r = new InternalResourceViewResolver();
         r.setViewClass(JstlView.class);
         r.setCache(false);
 
