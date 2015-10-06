@@ -49,6 +49,11 @@ public class MvcConfig {
     private String suffix = ".html";
 
     /**
+     * To cache the JSPs or not
+     */
+    private boolean caching = true;
+
+    /**
      * Defining a ViewResolver bean
      * 
      * @return Bean instance
@@ -58,7 +63,7 @@ public class MvcConfig {
 
         InternalResourceViewResolver r = new InternalResourceViewResolver();
         r.setViewClass(JstlView.class);
-        r.setCache(false);
+        r.setCache(caching);
 
         if (templatesRoot != null) {
             r.setPrefix(templatesRoot);
@@ -116,5 +121,14 @@ public class MvcConfig {
     public void setSuffix(String suffix) {
 
         this.suffix = suffix;
+    }
+
+    /**
+     * @param caching
+     *            the caching to set
+     */
+    public void setCaching(boolean caching) {
+
+        this.caching = caching;
     }
 }
