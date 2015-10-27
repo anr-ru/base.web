@@ -38,5 +38,5 @@ describe('AppCtrl tests', function(){
             console.log(scope);
             expect(scope.messages).toBe('');
         }));
-    })    
+    });    
 });

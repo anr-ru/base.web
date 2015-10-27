@@ -11,6 +11,6 @@ controllers.controller('AppCtrl', [ '$scope','RestService', function($scope, res
     
     $scope.clicked=function() {
         $scope.messages=$scope.items;
-    }
+    };
     
 } ]);

@@ -56,7 +56,7 @@ module.exports = function(grunt) {
         }        
     });
     
-    grunt.registerTask('dev', ['clean', 'uglify:dev' ]);
+    grunt.registerTask('dev', ['clean', 'jshint', 'uglify:dev' ]);
     grunt.registerTask('build', [ 'clean', 'jshint', 'concat', 'uglify:dev']);
 
     grunt.registerTask('default', ['build']);    
