@@ -37,41 +37,72 @@
                         </goals>
                         <configuration>
                             <includes>
-                                <include>**/*TestCase*</include>
+                                <include>**/BaseWebTestCase*</include>
                             </includes>
+                           <skip>false</skip>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <classesDirectory>${project.build.testOutputDirectory}</classesDirectory>
+                    <mainClass>ru.anr.base.web.samples.config.WebApplication</mainClass>
+                    <classifier>boot</classifier>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>                            
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <configuration>
+                    <srcdir>${basedir}/src/test/resources/static/</srcdir>
+                </configuration>
+                <executions>
+                        <execution>
+                            <id>grunt build</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>grunt</goal>
+                            </goals>
+                            <configuration>
+                                <srcdir>${basedir}/src/test/resources/static/</srcdir>
+                                <triggerfiles>
+                                  <triggerfile>${project.build.directory}/gruntFile.js</triggerfile>
+                                  <triggerfile>${project.build.directory}/package.json</triggerfile>
+                                  <triggerfile>${project.build.directory}/bower.json</triggerfile>
+                                </triggerfiles> 
+                                <arguments>--verbose ${target.environment}</arguments>
+                            </configuration>
+                        </execution>
+                </executions>
+            </plugin>                
         </plugins>
     </build>
 
-    <dependencies>    
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        
-        <!-- TESTS -->        
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.main.extras</groupId>
-            <artifactId>glassfish-embedded-web</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-parent</artifactId>
+                <version>${spring.cloud.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+    
+        <!-- internal -->
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.services</artifactId>
@@ -81,35 +112,61 @@
             <artifactId>base.facade</artifactId>
             <scope>test</scope>
         </dependency>
-          
-        <!-- TEST -->
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>        
+        
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.tests</artifactId>
         </dependency>
-        <dependency>
-            <groupId>ru.anr</groupId>
-            <artifactId>base.facade</artifactId>
-            <classifier>tests</classifier>
-        </dependency>
-        <!-- Selenium WebDriver extension -->           
+
+        <!-- WebDriver extension -->
         <dependency>
             <groupId>com.codeborne</groupId>
             <artifactId>selenide</artifactId>
             <scope>test</scope>
-        </dependency>        
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <scope>test</scope>
         </dependency>
-        <!-- Jasmine Runner from JUnit tests -->
-        <dependency>
-            <groupId>de.helwich.junit</groupId>
-            <artifactId>junit-jasmine-runner</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
+
     </dependencies>
+
+    <properties>
+        <base.platform.version>0.5-SNAPSHOT</base.platform.version>
+        <spring.cloud.version>1.0.0.RELEASE</spring.cloud.version>
+        <spring.version>4.1.5.RELEASE</spring.version>
+    </properties>
     
 </project>

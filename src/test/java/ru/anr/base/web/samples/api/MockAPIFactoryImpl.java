@@ -32,6 +32,9 @@ public class MockAPIFactoryImpl extends MockJSONAPICommandFactoryImpl {
                 // Just load a prepared response from a file
                 r = generateResponse(loadFromFile("json/datas.bin"), cmd);
                 break;
+            case "files":
+                log("Uploaded size:\n{}", cmd.getContexts().get("size"));
+                r = generateResponse("{\"code:\"0}", cmd);
             default:
                 r = super.process(cmd);
                 break;

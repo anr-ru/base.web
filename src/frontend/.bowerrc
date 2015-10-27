@@ -1,0 +1,18 @@
+{
+  "analytics": false,
+  "directory": "./test-classes/static/bower_components",
+  "registry": {
+        "search": [
+            "https://jnAjmXv3GMyxVth7w9aj@bower.fury.io/me/",
+            "https://bower.herokuapp.com"
+        ]
+    },
+  "color": true,
+  "timeout": 60000,
+  "storage": {
+    "packages" : "/tmp/.bower/packages",
+    "registry" : "/tmp/.bower/registry",
+    "links" : "/tmp/.bower/links"
+  },
+  "interactive": true
+}

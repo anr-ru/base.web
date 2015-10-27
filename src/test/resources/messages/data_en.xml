@@ -2,4 +2,5 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
     <entry key="hello.world">Hello, world!</entry>
+    <entry key="size.limit.exceeded.exception">The file size exceeds: {0}</entry>
 </properties>

@@ -10,11 +10,12 @@
     <context:property-placeholder location="classpath:application.properties"/>
     <context:component-scan base-package="ru.anr.base.web" />
 
+    <bean id="mvcConfig" class="ru.anr.base.web.MvcConfig" 
+        p:templatesRoot="/WEB-INF/" />
+    <bean class="ru.anr.base.web.GlobalExceptionHandler" />        
+
     <mvc:annotation-driven />
 
-    <!-- Static resources -->
-    <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
- 
     <!-- Main view (Index) -->
     <mvc:view-controller path="/" view-name="index" />
     <mvc:view-controller path="/index" view-name="index" />
@@ -23,8 +24,6 @@
     <mvc:view-controller path="/templates/phone-list" view-name="templates/phone-list" />
     <mvc:view-controller path="/templates/phone-detail" view-name="templates/phone-detail" />
     
-   <bean id="mvcConfig" class="ru.anr.base.web.MvcConfig" 
-        p:templatesRoot="/WEB-INF/" />
  
    <bean id="messageConfig" 
         class="ru.anr.base.services.MessagePropertiesConfig" 
