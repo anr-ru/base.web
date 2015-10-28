@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.tomcat.util.http.fileupload.FileUploadBase.SizeLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.util.UriUtils;
 
+import ru.anr.base.ApplicationException;
 import ru.anr.base.services.BaseServiceImpl;
 
 /**
@@ -44,6 +44,27 @@ public class GlobalExceptionHandler extends BaseServiceImpl {
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     /**
+     * Constructor with a specific exception type to be checked
+     * 
+     * @param specific
+     *            The exception class to expect Size Limit
+     */
+    public GlobalExceptionHandler(String specific) {
+
+        super();
+        try {
+            this.specific = Class.forName(specific);
+        } catch (ClassNotFoundException ex) {
+            throw new ApplicationException(ex);
+        }
+    }
+
+    /**
+     * A specific exception type
+     */
+    private Class<?> specific;
+
+    /**
      * A special case when the {@link MultipartException} is thrown
      * 
      * @param request
@@ -63,7 +84,7 @@ public class GlobalExceptionHandler extends BaseServiceImpl {
         String errorMessage = text("internal.server.error");
         Throwable cause = exception.getCause();
         while (cause != null) {
-            if (cause instanceof SizeLimitExceededException) {
+            if (specific.isInstance(cause)) {
                 errorMessage = text("size.limit.exceeded.exception", maxFileSize);
                 break;
             }

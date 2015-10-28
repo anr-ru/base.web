@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ru.anr.base.web.samples;
+package ru.anr.base.web.tests;
 
 import java.io.UnsupportedEncodingException;
 
@@ -22,7 +22,6 @@ import org.springframework.web.util.UriUtils;
 
 import ru.anr.base.facade.web.api.RestClient;
 import ru.anr.base.web.samples.config.WebApplication;
-import ru.anr.base.web.tests.BaseWebTestCase;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
