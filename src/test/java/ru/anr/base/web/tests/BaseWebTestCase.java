@@ -6,6 +6,7 @@ package ru.anr.base.web.tests;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -33,4 +34,10 @@ public class BaseWebTestCase extends BaseTestCase {
      */
     @Rule
     public ScreenShooter shots = ScreenShooter.failedTests().to("target/screenshots");
+
+    /**
+     * test port
+     */
+    @Value("${local.server.port}")
+    protected int port;
 }
