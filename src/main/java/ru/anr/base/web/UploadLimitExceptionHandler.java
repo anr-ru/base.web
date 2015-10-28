@@ -30,7 +30,7 @@ import ru.anr.base.services.BaseServiceImpl;
  * 
  */
 @ControllerAdvice
-public class GlobalExceptionHandler extends BaseServiceImpl {
+public class UploadLimitExceptionHandler extends BaseServiceImpl {
 
     /**
      * Max file size
@@ -41,19 +41,27 @@ public class GlobalExceptionHandler extends BaseServiceImpl {
     /**
      * Logger
      */
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(UploadLimitExceptionHandler.class);
 
     /**
      * Constructor with a specific exception type to be checked
      * 
      * @param specific
      *            The exception class to expect Size Limit
+     * @param errorMsgCode
+     *            The code for a general error message
+     * @param limitExceedsMsgCode
+     *            The code for the message in case of size limit's exceeding
      */
-    public GlobalExceptionHandler(String specific) {
+    public UploadLimitExceptionHandler(String specific, String errorMsgCode, String limitExceedsMsgCode) {
 
         super();
         try {
+
             this.specific = Class.forName(specific);
+            this.errorMsgCode = errorMsgCode;
+            this.limitExceedsMsgCode = limitExceedsMsgCode;
+
         } catch (ClassNotFoundException ex) {
             throw new ApplicationException(ex);
         }
@@ -63,6 +71,16 @@ public class GlobalExceptionHandler extends BaseServiceImpl {
      * A specific exception type
      */
     private Class<?> specific;
+
+    /**
+     * The code for a general upload error message
+     */
+    private String errorMsgCode;
+
+    /**
+     * The code for the message in case of size limit's exceeding
+     */
+    private String limitExceedsMsgCode;
 
     /**
      * A special case when the {@link MultipartException} is thrown
@@ -80,19 +98,17 @@ public class GlobalExceptionHandler extends BaseServiceImpl {
     public ResponseEntity<String> processMultipartException(HttpServletRequest request, Exception exception)
             throws UnsupportedEncodingException {
 
-        logger.debug("Caught exception: " + request.getContextPath(), exception);
-        String errorMessage = text("internal.server.error");
-        Throwable cause = exception.getCause();
-        while (cause != null) {
-            if (specific.isInstance(cause)) {
-                errorMessage = text("size.limit.exceeded.exception", maxFileSize);
-                break;
-            }
-            cause = cause.getCause();
+        logger.error("The exception caugth: " + request.getContextPath(), exception);
+
+        String errorMessage = text(errorMsgCode);
+
+        Throwable cause = new ApplicationException(exception).getMostSpecificCause();
+        if (specific.isInstance(cause)) {
+            errorMessage = text(limitExceedsMsgCode, maxFileSize);
         }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
-        // headers.add(CONTENT_ENCODING, StandardCharsets.UTF_8.toString());
         return new ResponseEntity<String>(UriUtils.encodePath(errorMessage, StandardCharsets.UTF_8.toString()),
                 headers, PAYLOAD_TOO_LARGE);
     }

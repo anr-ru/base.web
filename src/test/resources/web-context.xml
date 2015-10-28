@@ -12,8 +12,11 @@
 
     <bean id="mvcConfig" class="ru.anr.base.web.MvcConfig" 
         p:templatesRoot="/WEB-INF/" />
-    <bean id = "handler" class="ru.anr.base.web.GlobalExceptionHandler">
+
+    <bean id = "handler" class="ru.anr.base.web.UploadLimitExceptionHandler">
         <constructor-arg index="0" value = "org.apache.tomcat.util.http.fileupload.FileUploadBase$SizeLimitExceededException"/>
+        <constructor-arg index="1" value = "size.limit.exceeded.exception" />
+        <constructor-arg index="2" value = "size.limit.exceeded.exception" />
     </bean>        
 
     <mvc:annotation-driven />
