@@ -16,8 +16,6 @@
 
 package ru.anr.base.web;
 
-import java.util.Locale;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -94,9 +92,10 @@ public class MvcConfig {
     public CookieLocaleResolver localeResolver() {
 
         CookieLocaleResolver r = new CookieLocaleResolver();
-        r.setDefaultLocale(Locale.ENGLISH);
+        // if set default, get locale from browser not work.
+        // r.setDefaultLocale(Locale.ENGLISH);
         r.setCookieName("applocales");
-        r.setCookieMaxAge(60 * 60); // 1 hour
+        r.setCookieMaxAge(60 * 60 * 24 * 360 * 10); // 10 years
 
         return r;
     }
