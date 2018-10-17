@@ -9,6 +9,9 @@ addons:
   firefox: "49.0"
 before_install:
   - cp .travis.settings.xml $HOME/.m2/settings.xml
+  - chmod +x ./target/karma
+  - chmod +x ./target/bower
+  - chmod +x ./target/npm
 
 deploy:
   provider: script
