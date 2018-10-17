@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/anr-ru/base.web?branch=master)](https://travis-ci.org/anr-ru/base.web)
+
 Base.Platform Project
 
 ==================
