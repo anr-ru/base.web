@@ -19,12 +19,12 @@ module.exports = function(config) {
         },
         port: 9876,
         logLevel: config.LOG_DEBUG,
-        browsers: ['Firefox'], 
+        browsers: ['PhantomJS'], 
         singleRun: false,
         autoWatch: true,
         plugins: [
             'karma-jasmine',
-            'karma-firefox-launcher',
+            'karma-phantomjs-launcher',
             'karma-junit-reporter'
         ]
     });
