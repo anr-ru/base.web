@@ -4,9 +4,10 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
         files: [
             // External libraries (using a 'usual' and 'min' to run with both build profile)
+            './test-classes/static/js/bundle.js',
             './test-classes/static/js/scripts.js',
             // External test libs
-            './test-classes/static/bower_components/angular-mocks/angular-mocks.js',
+            './node_modules/angular-mocks/angular-mocks.js',
             // Project files
             './test-classes/static/js/main.js',
             // Tests

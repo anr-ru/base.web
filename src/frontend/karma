@@ -1,2 +1,4 @@
 #!/bin/sh
-"node/node" "node_modules/karma/bin/karma" "$@"
+
+export PATH=./node:./node_modules/.bin:$PATH
+karma $@

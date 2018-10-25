@@ -22,6 +22,7 @@
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->	
 
+		<script src="./js/bundle.js" type="text/javascript"></script>
         <script src="./js/scripts.js" type="text/javascript"></script>
         <script src="./js/main.js" type="text/javascript"></script>
 

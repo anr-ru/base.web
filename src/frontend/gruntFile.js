@@ -10,11 +10,11 @@ module.exports = function(grunt) {
             source: '../src/test/resources/static/',
             test: '../src/test/javascript/',
             dest:   './test-classes/static',
+            deps:   './node_modules',
             dependencies:  [
-                '<%= app.dest %>/bower_components/jquery/dist/jquery.js',
-                '<%= app.dest %>/bower_components/bootstrap/dist/js/bootstrap.js',
-                '<%= app.dest %>/bower_components/angular/angular.js',
-                '<%= app.dest %>/bower_components/angular-resource/angular-resource.js'
+                '<%= app.deps %>/jquery/dist/jquery.js',
+                '<%= app.deps %>/bootstrap/dist/js/bootstrap.js'
+                // The rest is located under the 'browserify' section below
             ]
         },
         
@@ -53,11 +53,23 @@ module.exports = function(grunt) {
                         ['<%= app.dependencies %>']
                 }
             }
-        }        
+        },
+        // Here we put Node-based modules which need the 'require' function
+        // in order to build.
+        browserify: {
+            dist: {
+              files: {
+                '<%= app.dest %>/js/bundle.js': [
+                    '<%= app.deps %>/angular/index.js',
+                    '<%= app.deps %>/angular-resource/index.js'
+                 ]
+              }
+            }
+          }        
     });
     
-    grunt.registerTask('dev', ['clean', 'jshint', 'uglify:dev' ]);
-    grunt.registerTask('build', [ 'clean', 'jshint', 'concat', 'uglify:dev']);
+    grunt.registerTask('dev', ['clean', 'jshint','browserify', 'uglify:dev' ]);
+    grunt.registerTask('build', [ 'clean', 'jshint', 'concat', 'browserify', 'uglify:dev']);
 
     grunt.registerTask('default', ['build']);    
 };
