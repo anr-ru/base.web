@@ -5,7 +5,7 @@
     <parent>
         <groupId>ru.anr</groupId>
         <artifactId>base.platform.parent</artifactId>
-        <version>0.5-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     
     <artifactId>base.web</artifactId>
@@ -132,11 +132,13 @@
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.services</artifactId>
+            <version>1.0.0</version>
         </dependency>
         <!-- TESTS -->
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.facade</artifactId>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -180,6 +182,7 @@
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.tests</artifactId>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -193,7 +196,6 @@
     </dependencies>
 
     <properties>
-        <base.platform.version>0.5-SNAPSHOT</base.platform.version>
         <spring.cloud.version>1.0.0.RELEASE</spring.cloud.version>
         <spring.version>4.1.5.RELEASE</spring.version>
         
