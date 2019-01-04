@@ -13,8 +13,11 @@ before_install:
   - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
   - sudo rm -rf /usr/local/phantomjs
   - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
-
+  
 install:
+  - mvn -P ci install -DskipTests -Dmaven.test.skip=true
+
+script:
   -  mvn -B -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs 
 
 before_script:
