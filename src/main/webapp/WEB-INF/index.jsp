@@ -13,8 +13,8 @@
 		</title>
 
         <link href="./css/styles.css" rel="stylesheet" />
-        <link href="./bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="./bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+        <link href="./css/bootstrap.min.css" rel="stylesheet" />
+        <link href="./css/bootstrap-theme.min.css" rel="stylesheet" />
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!--[if lt IE 9]>

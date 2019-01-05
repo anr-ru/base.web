@@ -25,8 +25,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 /**
- * Configuration for MVC projects. Exports some beans for template and locale
- * processing.
+ * A configuration for MVC-based projects. Exports some beans for JSP-templates
+ * and locale processing.
  *
  *
  * @author Alexey Romanchuk
