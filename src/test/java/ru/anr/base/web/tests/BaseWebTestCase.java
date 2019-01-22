@@ -11,7 +11,6 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.junit.ScreenShooter;
 
 import ru.anr.base.tests.BaseTestCase;
@@ -41,14 +40,4 @@ public class BaseWebTestCase extends BaseTestCase {
      */
     @Value("${local.server.port}")
     protected int port;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setUp() {
-
-        super.setUp();
-        Configuration.browser = "phantomjs";
-    }
 }

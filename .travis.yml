@@ -15,7 +15,7 @@ before_install:
   - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
 
 script:
-  -  mvn -B -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs 
+  -  mvn -B -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs 
 
 before_script:
   - "export DISPLAY=:99.0"
@@ -24,7 +24,7 @@ before_script:
 
 deploy:
   provider: script
-  script: "mvn -P ci deploy -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs"
+  script: "mvn -P ci deploy -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs" 
   skip_cleanup: false
   condition: "$TRAVIS_TAG = ^v.*$"
   on:

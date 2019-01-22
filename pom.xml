@@ -204,6 +204,8 @@
         <node.version>v8.11.3</node.version>
         <npm.version>6.4.0</npm.version>
         
+        <selenide.browser>phantomjs</selenide.browser>
+        
     </properties>
     
 </project>
