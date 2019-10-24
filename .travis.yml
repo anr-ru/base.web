@@ -1,5 +1,8 @@
 sudo: false
+dist: trusty
 language: java
+jdk:
+  - oraclejdk8
 services:
 - docker
 cache:
@@ -26,6 +29,4 @@ deploy:
   provider: script
   script: "mvn -P ci deploy -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs" 
   skip_cleanup: false
-  condition: "$TRAVIS_TAG = ^v.*$"
-  on:
-    tags: true
+  condition: "$TRAVIS_TAG = ^v.*$ OR branch = master"
