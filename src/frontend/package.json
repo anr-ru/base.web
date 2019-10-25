@@ -5,7 +5,7 @@
   "dependencies": {
     "angular": "~1.4.7",
     "angular-resource": "~1.4.7",
-    "bootstrap": "~3.3.4",
+    "bootstrap": "~4.3.1",
     "jquery": "~2.1.1"
   },
   
