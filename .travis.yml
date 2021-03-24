@@ -16,9 +16,13 @@ before_install:
   - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
   - sudo rm -rf /usr/local/phantomjs
   - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
+  - wget -P $HOME https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+  - tar xzvf $HOME/apache-maven-3.6.3-bin.tar.gz -C $HOME
+  - export PATH=$HOME/apache-maven-3.6.3/bin:$PATH
+  - mvn -v
 
 script:
-  -  mvn -B -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs 
+  -  "mvn -B -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs -Dversioning.disable=false"
 
 before_script:
   - "export DISPLAY=:99.0"
@@ -27,6 +31,7 @@ before_script:
 
 deploy:
   provider: script
-  script: "mvn -P ci deploy -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs" 
+  script: "mvn -P ci deploy -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs -Dversioning.disable=false"
   skip_cleanup: false
-  condition: "$TRAVIS_TAG = ^v.*$ OR branch = master"
+    on:
+      tags: true
