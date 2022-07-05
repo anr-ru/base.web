@@ -79,7 +79,6 @@ public class MvcConfig {
     @Bean(name = "localeInterceptor")
     @DependsOn("localeResolver")
     public LocaleChangeInterceptor interceptor() {
-
         return new LocaleChangeInterceptor();
     }
 

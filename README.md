@@ -9,3 +9,10 @@ Provides a configuration and example for Single Page Application based on REST A
 
 Contains examples for Selenide framework (extension for Selenium WebDriver) and some libraries to test JavaScript via
 Jasmine from JUnit tests. 
+
+TODO:
+
+1. Next steps:
+   https://github.com/Baeldung/spring-security-oauth/blob/master/oauth-sso/sso-client-app-1/src/main/resources/application.yml
+   https://www.baeldung.com/sso-spring-security-oauth2
+   https://docs.spring.io/spring-security-oauth2-boot/docs/2.4.4/reference/html5/

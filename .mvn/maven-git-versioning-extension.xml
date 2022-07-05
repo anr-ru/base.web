@@ -1,9 +1,9 @@
 <gitVersioning>
-    <branch>
-        <pattern>master</pattern>
-        <versionFormat>${version}</versionFormat>
-    </branch>
-    <branch>
+   <branch>
+       <pattern>master</pattern>
+       <versionFormat>${version}</versionFormat>
+   </branch>
+   <branch>
         <pattern>.*</pattern>
         <!-- i.e. API-123-SNAPSHOT -->
         <versionFormat>${branch}-SNAPSHOT</versionFormat>

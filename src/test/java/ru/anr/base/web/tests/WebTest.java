@@ -1,30 +1,21 @@
 /**
- * 
+ *
  */
 package ru.anr.base.web.tests;
 
-import java.io.UnsupportedEncodingException;
-
-import org.junit.Assert;
-import org.junit.Test;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.util.UriUtils;
-
 import ru.anr.base.facade.web.api.RestClient;
-import ru.anr.base.web.samples.config.WebApplication;
-
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
+import ru.anr.base.web.config.samples.WebApplication;
 
 /**
  * Sample JUnit test for demonstrating WebDriver extension Selenide.
@@ -34,7 +25,7 @@ import com.codeborne.selenide.Selenide;
  * @created Nov 24, 2014
  *
  */
-@SpringApplicationConfiguration(classes = WebApplication.class)
+@SpringBootTest(classes = WebApplication.class)
 public class WebTest extends BaseWebTestCase {
 
     /**
@@ -45,13 +36,12 @@ public class WebTest extends BaseWebTestCase {
     public void load() {
 
         Selenide.open("http://localhost:8080");
-        Selenide.assertNoJavascriptErrors();
 
-        Assert.assertEquals("Hello, world!", Selenide.$(By.id("txt")).getText());
+        Assertions.assertEquals("Hello, world!", Selenide.$(By.id("txt")).getText());
 
         Selenide.open("http://localhost:8080/?locale=ru_RU");
 
-        Assert.assertEquals("Привет, мир!", Selenide.$(By.id("txt")).getText());
+        Assertions.assertEquals("Привет, мир!", Selenide.$(By.id("txt")).getText());
         Selenide.$(By.id("txt")).shouldHave(Condition.text("Привет, мир!"));
     }
 
@@ -76,7 +66,7 @@ public class WebTest extends BaseWebTestCase {
     public void loadJSON() {
 
         Selenide.open("http://localhost:8080/api/v1/datas");
-        Assert.assertEquals(JSON.replaceAll(" ", ""), Selenide.getFocusedElement().getText().replaceAll(" ", ""));
+        Assertions.assertEquals(JSON.replaceAll(" ", ""), Selenide.getFocusedElement().getText().replaceAll(" ", ""));
     }
 
     /**
@@ -89,12 +79,12 @@ public class WebTest extends BaseWebTestCase {
         Selenide.$(By.tagName("h3")).should(Condition.text(""));
 
         Selenide.$(By.id("lnk")).click();
-        Assert.assertEquals(JSON.replaceAll(" ", ""), Selenide.$(By.tagName("h3")).getText().replaceAll(" ", ""));
+        Assertions.assertEquals(JSON.replaceAll(" ", ""), Selenide.$(By.tagName("h3")).getText().replaceAll(" ", ""));
     }
 
     /**
      * Sends a file with the specified name
-     * 
+     *
      * @param fileName
      *            The name of a file
      * @return A response
@@ -125,13 +115,9 @@ public class WebTest extends BaseWebTestCase {
         try {
             sendFile("web-context.xml");
         } catch (HttpClientErrorException ex) {
-            Assert.assertEquals(HttpStatus.PAYLOAD_TOO_LARGE, ex.getStatusCode());
-            try {
-                Assert.assertEquals("The file size exceeds: 1Kb",
-                        UriUtils.decode(ex.getResponseBodyAsString(), "utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                // ignore
-            }
+            Assertions.assertEquals(HttpStatus.PAYLOAD_TOO_LARGE, ex.getStatusCode());
+            Assertions.assertEquals("The file size exceeds: 1Kb",
+                    UriUtils.decode(ex.getResponseBodyAsString(), "utf-8"));
         }
 
         // The file with a normal size

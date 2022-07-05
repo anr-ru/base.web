@@ -1,21 +1,38 @@
+<!--
+ * Copyright 2014-2022 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
-        <groupId>ru.anr</groupId>
+        <groupId>org.anrruf</groupId>
         <artifactId>base.platform.parent</artifactId>
-        <version>1.0.0</version>
+        <version>2.0.0-SNAPSHOT-991587b</version>
     </parent>
-    
+
     <artifactId>base.web</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
+
     <name>Base Web Application</name>
-    
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
@@ -33,14 +50,14 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals>                            
+                        <goals>
                             <goal>test-jar</goal>
                         </goals>
                         <configuration>
                             <includes>
                                 <include>**/BaseWebTestCase*</include>
                             </includes>
-                           <skip>false</skip>
+                            <skip>false</skip>
                         </configuration>
                     </execution>
                 </executions>
@@ -78,9 +95,9 @@
                         <configuration>
                             <srcdir>${basedir}/src/test/resources/static/</srcdir>
                             <triggerfiles>
-                              <triggerfile>${project.build.directory}/gruntFile.js</triggerfile>
-                              <triggerfile>${project.build.directory}/package.json</triggerfile>
-                            </triggerfiles> 
+                                <triggerfile>${project.build.directory}/gruntFile.js</triggerfile>
+                                <triggerfile>${project.build.directory}/package.json</triggerfile>
+                            </triggerfiles>
                             <arguments>--verbose ${target.environment}</arguments>
                         </configuration>
                     </execution>
@@ -92,50 +109,66 @@
                         </goals>
                         <configuration>
                             <karmaConfPath>karma.conf.ci.js</karmaConfPath>
-                            <skipTests>${maven.test.skip}</skipTests>
+                            <skipTests>${skipTests}</skipTests>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>                
+            </plugin>
         </plugins>
     </build>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!--dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-parent</artifactId>
                 <version>${spring.cloud.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
-            </dependency>
+            </dependency-->
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
-    
+
         <!-- internal -->
         <dependency>
-            <groupId>ru.anr</groupId>
+            <groupId>org.anrruf</groupId>
             <artifactId>base.services</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0-SNAPSHOT-812506f</version>
         </dependency>
         <!-- TESTS -->
         <dependency>
-            <groupId>ru.anr</groupId>
+            <groupId>org.anrruf</groupId>
             <artifactId>base.facade</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0-SNAPSHOT-b1f0036</version>
+            <scope>test</scope>
+        </dependency>
+        <!--dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <scope>test</scope>
+        </dependency-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <scope>test</scope>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -147,28 +180,54 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.embed.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-util</artifactId>
+            <version>${tomcat.embed.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>${tomcat.embed.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
+            <version>1.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
-            <groupId>ru.anr</groupId>
+            <groupId>org.anrruf</groupId>
             <artifactId>base.tests</artifactId>
-            <version>1.0.0</version>
+            <version>2.0.0-SNAPSHOT-dc74922</version>
             <scope>test</scope>
         </dependency>
 
@@ -182,15 +241,8 @@
     </dependencies>
 
     <properties>
-        <spring.cloud.version>1.0.0.RELEASE</spring.cloud.version>
-        <spring.version>4.1.5.RELEASE</spring.version>
-        
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-        <node.version>v8.11.3</node.version>
-        <npm.version>6.4.0</npm.version>
-        
         <selenide.browser>phantomjs</selenide.browser>
-        
+        <tomcat.embed.version>10.0.20</tomcat.embed.version>
     </properties>
-    
+
 </project>

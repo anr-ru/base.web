@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
-    xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <context:property-placeholder location="classpath:application.properties"/>
-    <context:component-scan base-package="ru.anr.base.web.samples" />
+    <context:component-scan base-package="ru.anr.base.web.samples"/>
 
-    <bean id="mvcConfig" class="ru.anr.base.web.MvcConfig" 
-        p:templatesRoot="/WEB-INF/" />
+    <bean id="mvcConfig" class="ru.anr.base.web.MvcConfig" p:suffix=".jsp"
+          p:templatesRoot="/WEB-INF/"/>
 
-    <bean id = "handler" class="ru.anr.base.web.UploadLimitExceptionHandler">
-        <constructor-arg index="0" value = "org.apache.tomcat.util.http.fileupload.FileUploadBase$SizeException"/>
-        <constructor-arg index="1" value = "size.limit.exceeded.exception" />
-        <constructor-arg index="2" value = "size.limit.exceeded.exception" />
-    </bean>        
+    <bean id="handler" class="ru.anr.base.web.UploadLimitExceptionHandler">
+        <constructor-arg index="0" value="org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException"/>
+        <constructor-arg index="1" value="size.limit.exceeded.exception"/>
+        <constructor-arg index="2" value="size.limit.exceeded.exception"/>
+    </bean>
 
-    <mvc:annotation-driven />
+    <mvc:annotation-driven/>
 
     <!-- Main view (Index) -->
-    <mvc:view-controller path="/" view-name="index" />
-    <mvc:view-controller path="/index" view-name="index" />
- 
+    <mvc:view-controller path="/" view-name="index"/>
+    <mvc:view-controller path="/index" view-name="index"/>
+
     <!-- Inner templates (loaded by Ajax) -->
-    <mvc:view-controller path="/templates/phone-list" view-name="templates/phone-list" />
-    <mvc:view-controller path="/templates/phone-detail" view-name="templates/phone-detail" />
-    
- 
-   <bean id="messageConfig" 
-        class="ru.anr.base.services.MessagePropertiesConfig" 
-        p:paths-ref="messages"/>
-                
+    <mvc:view-controller path="/templates/phone-list" view-name="templates/phone-list"/>
+    <mvc:view-controller path="/templates/phone-detail" view-name="templates/phone-detail"/>
+
+
+    <bean id="messageConfig"
+          class="ru.anr.base.services.MessagePropertiesConfig"
+          p:paths-ref="messages"/>
+
     <util:list id="messages">
         <value>classpath:/messages/data</value>
     </util:list>
- 
+
     <mvc:interceptors>
         <ref bean="localeInterceptor"/>
-    </mvc:interceptors>    
+    </mvc:interceptors>
 
 </beans>

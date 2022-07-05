@@ -18,6 +18,7 @@ import org.springframework.web.util.UriUtils;
 
 import ru.anr.base.domain.api.APICommand;
 import ru.anr.base.facade.web.api.AbstractAPIController;
+import ru.anr.base.facade.web.api.CommandUtils;
 
 /**
  * Mock API controller sample - uses static data and emulate api backend.
@@ -44,8 +45,7 @@ public class MockApiController extends AbstractAPIController {
      */
     @RequestMapping(value = "/datas", method = RequestMethod.GET)
     public String doGet() {
-
-        APICommand cmd = buildAPI("datas", "v1");
+        APICommand cmd = CommandUtils.buildAPI("datas", "v1");
         return process(cmd).getRawModel();
     }
 
@@ -61,11 +61,10 @@ public class MockApiController extends AbstractAPIController {
     @RequestMapping(value = "/files", method = POST)
     @ResponseBody
     public String upload(@RequestParam("file") MultipartFile file) throws IOException {
-
-        APICommand cmd = buildAPI("files", "v1").context(//
-                "contentType", file.getContentType(), //
-                "originalFilename", UriUtils.decode(file.getOriginalFilename(), StandardCharsets.UTF_8.toString()), //
-                "size", file.getSize(), //
+        APICommand cmd = CommandUtils.buildAPI("files", "v1").context(
+                "contentType", file.getContentType(),
+                "originalFilename", UriUtils.decode(file.getOriginalFilename(), StandardCharsets.UTF_8.toString()),
+                "size", file.getSize(),
                 "data", file.getBytes());
         return process(cmd).getRawModel();
     }

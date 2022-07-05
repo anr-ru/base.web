@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-         
+
     <display-name>Web application</display-name>
-    <distributable />
+    <distributable/>
 
     <servlet>
         <servlet-name>webapp</servlet-name>
@@ -18,7 +18,7 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
-    <!-- Added standard configuration for JSP (from default-web.xml) to make *.html to process -->    
+    <!-- Added standard configuration for JSP (from default-web.xml) to make *.html to process -->
     <servlet>
         <servlet-name>jsp</servlet-name>
         <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
@@ -31,26 +31,26 @@
             <param-value>GET</param-value>
         </init-param>
         <load-on-startup>3</load-on-startup>
-    </servlet>    
-    
-    
-    <!-- MAPPINGS -->    
-    
+    </servlet>
+
+
+    <!-- MAPPINGS -->
+
     <servlet-mapping>
         <servlet-name>jsp</servlet-name>
-        <url-pattern>*.html</url-pattern>
-    </servlet-mapping>         
-    
+        <url-pattern>*.jsp</url-pattern>
+    </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>webapp</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-    
+
     <jsp-config>
-        <taglib>   
-            <taglib-uri>http://www.springframework.org/tags</taglib-uri>  
-            <taglib-location>/WEB-INF/tlds/spring.tld</taglib-location>    
-        </taglib>        
+        <taglib>
+            <taglib-uri>http://www.springframework.org/tags</taglib-uri>
+            <taglib-location>/WEB-INF/tlds/spring.tld</taglib-location>
+        </taglib>
     </jsp-config>
-         
+
 </web-app>
