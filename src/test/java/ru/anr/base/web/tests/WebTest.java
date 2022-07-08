@@ -20,12 +20,10 @@ import ru.anr.base.web.config.samples.WebApplication;
 /**
  * Sample JUnit test for demonstrating WebDriver extension Selenide.
  *
- *
  * @author Alexey Romanchuk
  * @created Nov 24, 2014
- *
  */
-@SpringBootTest(classes = WebApplication.class)
+@SpringBootTest(classes = WebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class WebTest extends BaseWebTestCase {
 
     /**
@@ -35,11 +33,11 @@ public class WebTest extends BaseWebTestCase {
     @Test
     public void load() {
 
-        Selenide.open("http://localhost:8080");
+        Selenide.open("http://localhost:" + port);
 
         Assertions.assertEquals("Hello, world!", Selenide.$(By.id("txt")).getText());
 
-        Selenide.open("http://localhost:8080/?locale=ru_RU");
+        Selenide.open("http://localhost:" + port + "/?locale = ru_RU");
 
         Assertions.assertEquals("Привет, мир!", Selenide.$(By.id("txt")).getText());
         Selenide.$(By.id("txt")).shouldHave(Condition.text("Привет, мир!"));
@@ -64,8 +62,7 @@ public class WebTest extends BaseWebTestCase {
      */
     @Test
     public void loadJSON() {
-
-        Selenide.open("http://localhost:8080/api/v1/datas");
+        Selenide.open("http://localhost:" + port + "/api/v1/datas");
         Assertions.assertEquals(JSON.replaceAll(" ", ""), Selenide.getFocusedElement().getText().replaceAll(" ", ""));
     }
 
@@ -75,7 +72,7 @@ public class WebTest extends BaseWebTestCase {
     @Test
     public void angularClick() {
 
-        Selenide.open("http://localhost:8080");
+        Selenide.open("http://localhost:" + port);
         Selenide.$(By.tagName("h3")).should(Condition.text(""));
 
         Selenide.$(By.id("lnk")).click();
@@ -85,8 +82,7 @@ public class WebTest extends BaseWebTestCase {
     /**
      * Sends a file with the specified name
      *
-     * @param fileName
-     *            The name of a file
+     * @param fileName The name of a file
      * @return A response
      */
     private ResponseEntity<String> sendFile(String fileName) {

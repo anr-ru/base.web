@@ -1,12 +1,12 @@
 /*
- * Copyright 2014 the original author or authors.
- * 
+ * Copyright 2014-2022 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -28,10 +28,8 @@ import org.springframework.web.servlet.view.JstlView;
  * A configuration for MVC-based projects. Exports some beans for JSP-templates
  * and locale processing.
  *
- *
  * @author Alexey Romanchuk
  * @created Nov 24, 2014
- *
  */
 @Configuration
 public class MvcConfig {
@@ -53,7 +51,7 @@ public class MvcConfig {
 
     /**
      * Defining a ViewResolver bean
-     * 
+     *
      * @return Bean instance
      */
     @Bean
@@ -73,7 +71,7 @@ public class MvcConfig {
 
     /**
      * Defining a locale interceptor
-     * 
+     *
      * @return Bean instance
      */
     @Bean(name = "localeInterceptor")
@@ -84,7 +82,7 @@ public class MvcConfig {
 
     /**
      * Defining a locale resolver, which store current locale in cookie.
-     * 
+     *
      * @return Bean instance
      */
     @Bean(name = "localeResolver")
@@ -104,8 +102,7 @@ public class MvcConfig {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * @param templatesRoot
-     *            the templatesRoot to set
+     * @param templatesRoot the templatesRoot to set
      */
     public void setTemplatesRoot(String templatesRoot) {
 
@@ -113,8 +110,7 @@ public class MvcConfig {
     }
 
     /**
-     * @param suffix
-     *            the suffix to set
+     * @param suffix the suffix to set
      */
     public void setSuffix(String suffix) {
 
@@ -122,8 +118,7 @@ public class MvcConfig {
     }
 
     /**
-     * @param caching
-     *            the caching to set
+     * @param caching the caching to set
      */
     public void setCaching(boolean caching) {
 

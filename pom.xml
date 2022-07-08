@@ -47,6 +47,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -65,6 +66,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
@@ -72,10 +74,28 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
+                <version>${frontend-maven-plugin.version}</version>
                 <configuration>
-                    <srcdir>${basedir}/src/test/resources/static/</srcdir>
+                    <workingDirectory>${app.dir}</workingDirectory>
+                    <srcdir>${app.dir}</srcdir>
+                    <outputdir>${app.dir}</outputdir>
+                    <installDirectory>${app.dir}/nodes</installDirectory>
+                    <environmentVariables>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <PATH>${app.dir}/nodes/node:${app.dir}/node_modules/.bin:${PATH}</PATH>
+                    </environmentVariables>
                 </configuration>
                 <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <configuration>
+                            <nodeVersion>${node.version}</nodeVersion>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>npm install</id>
                         <phase>process-resources</phase>
@@ -83,36 +103,46 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <arguments>install --force-latest</arguments>
+                            <arguments>install</arguments>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>grunt build</id>
-                        <phase>process-resources</phase>
+                        <id>build</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>grunt</goal>
+                            <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <srcdir>${basedir}/src/test/resources/static/</srcdir>
-                            <triggerfiles>
-                                <triggerfile>${project.build.directory}/gruntFile.js</triggerfile>
-                                <triggerfile>${project.build.directory}/package.json</triggerfile>
-                            </triggerfiles>
-                            <arguments>--verbose ${target.environment}</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>javascript tests</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>karma</goal>
-                        </goals>
-                        <configuration>
-                            <karmaConfPath>karma.conf.ci.js</karmaConfPath>
-                            <skipTests>${skipTests}</skipTests>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>${maven-clean-plugin.version}</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>${app.dir}/nodes</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${app.dir}/node_modules</directory>
+                        </fileset>
+                        <fileset>
+                            <directory>${app.dir}/static</directory>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <addResources>false</addResources>
+                    <mainClass>ru.anr.base.web.config.samples.WebApplication</mainClass>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -126,13 +156,6 @@
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
-            <!--dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-parent</artifactId>
-                <version>${spring.cloud.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency-->
         </dependencies>
     </dependencyManagement>
 
@@ -151,11 +174,11 @@
             <version>2.0.0-SNAPSHOT-b1f0036</version>
             <scope>test</scope>
         </dependency>
-        <!--dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <scope>test</scope>
-        </dependency-->
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring-boot.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -166,10 +189,10 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -180,6 +203,11 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+            <version>${spring.cloud.version}</version>
+        </dependency-->
         <!--dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
@@ -197,17 +225,16 @@
             <version>${tomcat.embed.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jasper</artifactId>
             <version>${tomcat.embed.version}</version>
-        </dependency>
-
+        </dependency-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
             <version>2.3.3</version>
@@ -218,6 +245,11 @@
             <artifactId>jstl-api</artifactId>
             <version>1.2</version>
             <scope>test</scope>
+        </dependency-->
+        <dependency>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>javax.servlet.jsp.jstl-api</artifactId>
+            <version>1.2.2</version>
         </dependency>
 
         <dependency>
@@ -237,12 +269,23 @@
             <artifactId>selenide</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>phantomjsdriver</artifactId>
+            <version>1.5.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <properties>
-        <selenide.browser>phantomjs</selenide.browser>
-        <tomcat.embed.version>10.0.20</tomcat.embed.version>
+        <tomcat.embed.version>9.0.64</tomcat.embed.version>
+        <node.version>v10.19.0</node.version>
+        <npm.version>6.13.4</npm.version>
+
+        <app.dir>${basedir}/angular/</app.dir>
+
+        <spring.cloud.version>2.2.10.RELEASE</spring.cloud.version>
+
     </properties>
 
 </project>

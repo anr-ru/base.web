@@ -7,3 +7,6 @@
 *.log
 /.idea/
 /base.web.iml
+nodes
+node_modules
+/public/

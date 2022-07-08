@@ -1,12 +1,12 @@
 /*
  * Copyright 2014 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -14,13 +14,6 @@
  * the License.
  */
 package ru.anr.base.web;
-
-import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
-
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,16 +26,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.util.UriUtils;
-
 import ru.anr.base.ApplicationException;
 import ru.anr.base.services.BaseServiceImpl;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
+import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 
 /**
  * A global error handler for exceptions.
  *
  * @author Dmitry Philippov
  * @created Sep 22, 2015
- * 
  */
 @ControllerAdvice
 public class UploadLimitExceptionHandler extends BaseServiceImpl {
@@ -60,13 +57,10 @@ public class UploadLimitExceptionHandler extends BaseServiceImpl {
 
     /**
      * Constructor with a specific exception type to be checked
-     * 
-     * @param specific
-     *            The exception class to expect Size Limit
-     * @param errorMsgCode
-     *            The code for a general error message
-     * @param limitExceedsMsgCode
-     *            The code for the message in case of size limit's exceeding
+     *
+     * @param specific            The exception class to expect Size Limit
+     * @param errorMsgCode        The code for a general error message
+     * @param limitExceedsMsgCode The code for the message in case of size limit's exceeding
      */
     public UploadLimitExceptionHandler(String specific, String errorMsgCode, String limitExceedsMsgCode) {
 
@@ -99,16 +93,13 @@ public class UploadLimitExceptionHandler extends BaseServiceImpl {
 
     /**
      * A special case when the {@link MultipartException} is thrown
-     * 
-     * @param request
-     *            request
-     * @param exception
-     *            exception
+     *
+     * @param request   request
+     * @param exception exception
      * @return response
-     * @throws UnsupportedEncodingException
-     *             if encoded to unsupported encoding
+     * @throws UnsupportedEncodingException if encoded to unsupported encoding
      */
-    @ExceptionHandler(value = { MultipartException.class })
+    @ExceptionHandler(value = {MultipartException.class})
     @ResponseBody
     public ResponseEntity<String> processMultipartException(HttpServletRequest request, Exception exception)
             throws UnsupportedEncodingException {
