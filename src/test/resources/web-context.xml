@@ -2,10 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
        xmlns:util="http://www.springframework.org/schema/util" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <context:property-placeholder location="classpath:application.properties"/>
     <context:component-scan base-package="ru.anr.base.web.samples"/>
@@ -33,5 +35,28 @@
     <mvc:interceptors>
         <ref bean="localeInterceptor"/>
     </mvc:interceptors>
+
+
+    <!-- Security -->
+    <security:http create-session="stateless"
+                   authentication-manager-ref="auth" entry-point-ref="entryPoint">
+        <security:csrf disabled="true"/>
+        <security:anonymous enabled="true"/>
+    </security:http>
+
+    <bean id="entryPoint"
+          class="org.springframework.security.web.authentication.HttpStatusEntryPoint">
+        <constructor-arg index="0" value="OK"/>
+    </bean>
+
+    <security:authentication-manager id="auth">
+        <security:authentication-provider ref="clientAuthenticationProvider"/>
+    </security:authentication-manager>
+
+    <bean id="clientAuthenticationProvider"
+          class="org.springframework.security.authentication.AnonymousAuthenticationProvider">
+        <constructor-arg index="0" value="KEY"/>
+    </bean>
+
 
 </beans>

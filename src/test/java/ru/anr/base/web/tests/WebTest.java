@@ -67,6 +67,17 @@ public class WebTest extends BaseWebTestCase {
     }
 
     /**
+     * Use case: get favicon
+     */
+    @Test
+    public void loadFavIcon() {
+        RestClient r = new RestClient();
+
+        ResponseEntity<String> icon = r.get("/favicon.ico");
+        Assertions.assertEquals(icon.getBody(), readAsString("/static/assets/favicon.ico"));
+    }
+
+    /**
      * Doing some Angular click.
      */
     @Test

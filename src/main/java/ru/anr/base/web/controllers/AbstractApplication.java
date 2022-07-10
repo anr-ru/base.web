@@ -1,11 +1,12 @@
 package ru.anr.base.web.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 import ru.anr.base.BaseSpringParent;
+import ru.anr.base.web.ResourceLocator;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 
 /**
@@ -26,6 +29,8 @@ import java.util.Collections;
 @RestController
 public abstract class AbstractApplication extends BaseSpringParent {
 
+    private static final Logger logger = LoggerFactory.getLogger(AbstractApplication.class);
+
     /**
      * The build number
      */
@@ -36,6 +41,12 @@ public abstract class AbstractApplication extends BaseSpringParent {
      */
     @Value("${application.version:0.0.0}")
     private String version;
+
+    @PostConstruct
+    public void started() {
+        logger.info("Web App started: version={}, build={}", this.version, this.build);
+    }
+
 
     /**
      * A runner of applications
@@ -60,13 +71,13 @@ public abstract class AbstractApplication extends BaseSpringParent {
     }
 
     /**
-     * A configuration for loading 'favicon.ico'
+     * A configuration for loading 'favicon.ico' from the 'assets' directory.
      */
     @Configuration
     public static class FaviconConfiguration {
 
         @Autowired
-        private ApplicationContext ctx;
+        private ResourceLocator resources;
 
         /**
          * @return A mapper bean
@@ -83,7 +94,7 @@ public abstract class AbstractApplication extends BaseSpringParent {
         @Bean
         protected ResourceHttpRequestHandler myFaviconRequestHandler() {
             ResourceHttpRequestHandler requestHandler = new ResourceHttpRequestHandler();
-            requestHandler.setLocations(list(ctx.getResource("classpath:/static/favicon.ico")));
+            requestHandler.setLocations(list(resources.getPath("/assets/favicon.ico")));
             requestHandler.setCacheSeconds(0);
             return requestHandler;
         }

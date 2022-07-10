@@ -38,7 +38,7 @@ import org.springframework.web.servlet.view.JstlView;
  * @created Nov 24, 2014
  */
 @Configuration
-public class MvcConfig implements WebMvcConfigurer {
+public class MvcConfig implements WebMvcConfigurer, ResourceLocator {
 
     // The classpath-related location of html/jsp templates
     private String templatesRoot = "/static/";
@@ -104,12 +104,17 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        Resource locations = new ClassPathResource(this.templatesRoot);
+        Resource locations = this.getPath("");
         registry.addResourceHandler("/**")
                 .addResourceLocations(locations)
                 .setCachePeriod(cachePeriod)
                 .resourceChain(caching)
                 .addResolver(new PathResourceResolver());
+    }
+
+    @Override
+    public Resource getPath(String resource) {
+        return new ClassPathResource(this.templatesRoot + resource);
     }
 
     ///////////////////////////////////////////////////////////////////////////
