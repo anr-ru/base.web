@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {catchError, finalize} from 'rxjs/operators';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
 
 
 /**
@@ -31,7 +32,7 @@ export class ApiService {
 
   http: HttpClient;
 
-  constructor(_http: HttpClient) {
+  constructor(_http: HttpClient, private translate: TranslateService) {
     this.http = _http;
   }
 
@@ -41,7 +42,9 @@ export class ApiService {
    * @param url The URL of the query
    */
   public get<T>(url: string): Observable<T> {
-    return this.http.get<T>(url, ApiService.rqOptions).pipe(
+    // turn on specific language on the server side
+    const urlX = url + '?locale=' + this.translate.currentLang;
+    return this.http.get<T>(urlX, ApiService.rqOptions).pipe(
       catchError(err => this.handleError(err)),
       finalize(() => {
       })

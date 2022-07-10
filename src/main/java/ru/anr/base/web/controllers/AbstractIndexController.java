@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import ru.anr.base.BaseSpringParent;
 import ru.anr.base.services.serializer.JSONSerializerImpl;
@@ -27,7 +28,7 @@ import ru.anr.base.services.serializer.Serializer;
 import java.util.Map;
 
 /**
- * Base Index Page
+ * A base prototype for the Index Page
  *
  * @author Alexey Romanchuk
  * @created Jul 8, 2022
@@ -39,8 +40,11 @@ public abstract class AbstractIndexController extends BaseSpringParent {
     /**
      * The build number
      */
-    @Value("${application.build}")
+    @Value("${application.build:0}")
     private String build;
+
+    @Value("${application.version:0.0.0}")
+    private String version;
 
     /**
      * JSON serializer
@@ -54,7 +58,8 @@ public abstract class AbstractIndexController extends BaseSpringParent {
      */
     protected ConfigModel prepareConfig() {
         ConfigModel cfg = new ConfigModel();
-        cfg.getProps().put("buildnum", build);
+        cfg.getProps().put("buildnumber", build);
+        cfg.getProps().put("version", version);
         cfg.getProps().put("production", isProdMode());
         cfg.getProps().put("profiles", getProfiles());
         return cfg;
@@ -63,7 +68,7 @@ public abstract class AbstractIndexController extends BaseSpringParent {
     /**
      * Returns a JSON with configuration parameters
      *
-     * @return
+     * @return The serialized JSON
      */
     @RequestMapping(value = {"/config"}, produces = "application/json; charset=UTF-8")
     @ResponseBody
@@ -77,14 +82,14 @@ public abstract class AbstractIndexController extends BaseSpringParent {
      * @param model A model with variables for the page
      * @return A view to redirect
      */
-    @RequestMapping({"/"})
+    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String getPageData(Map<String, Object> model) {
 
         logger.info("Profiles: {}", getProfiles());
 
         model.put("production", isProdMode());
-        model.put("buildnum", build);
+        model.put("buildnumber", build);
 
-        return "index"; // the name of the main page
+        return "index"; // the name of the template
     }
 }

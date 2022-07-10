@@ -19,40 +19,43 @@ package ru.anr.base.web;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 /**
- * A configuration for MVC-based projects. Exports some beans for JSP-templates
- * and locale processing.
+ * A configuration for MVC-based Spring Boot projects. Exports some beans for templates
+ * loading, locale processing and resource managements.
  *
  * @author Alexey Romanchuk
  * @created Nov 24, 2014
  */
 @Configuration
-public class MvcConfig {
+public class MvcConfig implements WebMvcConfigurer {
 
-    /**
-     * Location of jsp templates (by default is '/WEB-INF/')
-     */
-    private String templatesRoot = "/WEB-INF/";
+    // The classpath-related location of html/jsp templates
+    private String templatesRoot = "/static/";
 
-    /**
-     * Templates suffix
-     */
+    // Templates suffix
     private String suffix = ".html";
 
-    /**
-     * To cache the JSPs or not
-     */
-    private boolean caching = true;
+    // To cache the templates or not
+    private boolean caching = false;
+
+    // Cache Period in seconds
+    private int cachePeriod = 3600;
 
     /**
-     * Defining a ViewResolver bean
+     * Defines the ViewResolver bean
      *
-     * @return Bean instance
+     * @return The bean instance
      */
     @Bean
     public InternalResourceViewResolver viewResolver() {
@@ -60,19 +63,15 @@ public class MvcConfig {
         InternalResourceViewResolver r = new InternalResourceViewResolver();
         r.setViewClass(JstlView.class);
         r.setCache(caching);
-
-        if (templatesRoot != null) {
-            r.setPrefix(templatesRoot);
-        }
-
+        r.setPrefix(""); // reset this path as we use #addResourceHandlers below
         r.setSuffix(suffix);
         return r;
     }
 
     /**
-     * Defining a locale interceptor
+     * Defines the locale interceptor
      *
-     * @return Bean instance
+     * @return The bean instance
      */
     @Bean(name = "localeInterceptor")
     @DependsOn("localeResolver")
@@ -81,7 +80,7 @@ public class MvcConfig {
     }
 
     /**
-     * Defining a locale resolver, which store current locale in cookie.
+     * Defines the locale resolver which stores the current locale in cookies.
      *
      * @return Bean instance
      */
@@ -97,9 +96,25 @@ public class MvcConfig {
         return r;
     }
 
-    // /////////////////////////////////////////////////////////////////////////
-    // /// getters/setters
-    // /////////////////////////////////////////////////////////////////////////
+    // Defines the main servlet name
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable("dispatcher");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        Resource locations = new ClassPathResource(this.templatesRoot);
+        registry.addResourceHandler("/**")
+                .addResourceLocations(locations)
+                .setCachePeriod(cachePeriod)
+                .resourceChain(caching)
+                .addResolver(new PathResourceResolver());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///// getters/setters
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * @param templatesRoot the templatesRoot to set
@@ -123,5 +138,9 @@ public class MvcConfig {
     public void setCaching(boolean caching) {
 
         this.caching = caching;
+    }
+
+    public void setCachePeriod(int cachePeriod) {
+        this.cachePeriod = cachePeriod;
     }
 }

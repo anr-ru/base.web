@@ -4,9 +4,14 @@
     <p id="txt">
       {{getId() | async}}
     </p>
+    <p id="txt_server">
+      {{value | async}}
+    </p>
   </h2>
 
-  <a href="#" (click)="clicked()" id="lnk">Press me tenderly</a>
+  <a href="#" (click)="clickedEn()" id="lnk_en">Change to EN</a>
+  <br/>
+  <a href="#" (click)="clickedRu()" id="lnk_ru">Change to RU</a>
 
 </div>
 

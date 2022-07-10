@@ -15,7 +15,6 @@ export class ConfigService {
     return this._cfg;
   }
 
-
   // Important: It should return a Promise
   public load() {
 

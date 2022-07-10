@@ -10,3 +10,4 @@
 nodes
 node_modules
 /public/
+/build/

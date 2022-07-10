@@ -1,6 +1,8 @@
-import {Component} from '@angular/core';
-import {Observable} from 'rxjs';
-import {TranslateService} from "@ngx-translate/core";
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {TranslateService} from '@ngx-translate/core';
+import {ApiService} from '../core/api.service';
+import {map} from 'rxjs/operators';
 
 /**
  *  Main Dashboard.
@@ -12,9 +14,11 @@ import {TranslateService} from "@ngx-translate/core";
   selector: 'app-main',
   templateUrl: './main.component.html'
 })
-export class MainComponent {
+export class MainComponent implements OnInit {
 
-  constructor(private translate: TranslateService) {
+  value: Observable<string>;
+
+  constructor(private translate: TranslateService, private api: ApiService, private changes: ChangeDetectorRef) {
 
   }
 
@@ -22,7 +26,18 @@ export class MainComponent {
     return this.translate.get('prop');
   }
 
-  clicked() {
+  clickedEn() {
+    this.translate.use('en').subscribe(() => this.ngOnInit());
+  }
 
+  clickedRu() {
+    this.translate.use('ru').subscribe(() => this.ngOnInit());
+  }
+
+  ngOnInit() {
+    this.api.get<{ message: string }>('/api/v1/value').pipe(map(v => v.message)).subscribe(m => {
+      this.value = of(m);
+      this.changes.detectChanges();
+    });
   }
 }

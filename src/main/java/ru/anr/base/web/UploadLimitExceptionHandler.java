@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,13 +30,12 @@ import ru.anr.base.ApplicationException;
 import ru.anr.base.services.BaseServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 
 /**
- * A global error handler for exceptions.
+ * A global error handler for upload exceptions.
  *
  * @author Dmitry Philippov
  * @created Sep 22, 2015
@@ -44,15 +43,10 @@ import static org.springframework.http.HttpStatus.PAYLOAD_TOO_LARGE;
 @ControllerAdvice
 public class UploadLimitExceptionHandler extends BaseServiceImpl {
 
-    /**
-     * Max file size
-     */
+    // Max file size
     @Value("${multipart.maxFileSize}")
     private String maxFileSize;
 
-    /**
-     * Logger
-     */
     private static final Logger logger = LoggerFactory.getLogger(UploadLimitExceptionHandler.class);
 
     /**
@@ -63,14 +57,11 @@ public class UploadLimitExceptionHandler extends BaseServiceImpl {
      * @param limitExceedsMsgCode The code for the message in case of size limit's exceeding
      */
     public UploadLimitExceptionHandler(String specific, String errorMsgCode, String limitExceedsMsgCode) {
-
         super();
         try {
-
             this.specific = Class.forName(specific);
             this.errorMsgCode = errorMsgCode;
             this.limitExceedsMsgCode = limitExceedsMsgCode;
-
         } catch (ClassNotFoundException ex) {
             throw new ApplicationException(ex);
         }
@@ -79,32 +70,30 @@ public class UploadLimitExceptionHandler extends BaseServiceImpl {
     /**
      * A specific exception type
      */
-    private Class<?> specific;
+    private final Class<?> specific;
 
     /**
      * The code for a general upload error message
      */
-    private String errorMsgCode;
+    private final String errorMsgCode;
 
     /**
      * The code for the message in case of size limit's exceeding
      */
-    private String limitExceedsMsgCode;
+    private final String limitExceedsMsgCode;
 
     /**
-     * A special case when the {@link MultipartException} is thrown
+     * A handler when a {@link MultipartException} is thrown
      *
-     * @param request   request
-     * @param exception exception
-     * @return response
-     * @throws UnsupportedEncodingException if encoded to unsupported encoding
+     * @param request   The request
+     * @param exception The exception
+     * @return The response to be passed
      */
     @ExceptionHandler(value = {MultipartException.class})
     @ResponseBody
-    public ResponseEntity<String> processMultipartException(HttpServletRequest request, Exception exception)
-            throws UnsupportedEncodingException {
+    public ResponseEntity<String> processMultipartException(HttpServletRequest request, Exception exception) {
 
-        logger.error("The exception caugth: " + request.getContextPath(), exception);
+        logger.error("The exception caught: {}, {}", request.getContextPath(), exception.getMessage());
 
         String errorMessage = text(errorMsgCode);
 
@@ -115,7 +104,7 @@ public class UploadLimitExceptionHandler extends BaseServiceImpl {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
-        return new ResponseEntity<String>(UriUtils.encodePath(errorMessage, StandardCharsets.UTF_8.toString()),
+        return new ResponseEntity<>(UriUtils.encodePath(errorMessage, StandardCharsets.UTF_8.toString()),
                 headers, PAYLOAD_TOO_LARGE);
     }
 }

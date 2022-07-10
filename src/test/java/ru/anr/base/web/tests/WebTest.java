@@ -1,9 +1,5 @@
-/**
- *
- */
 package ru.anr.base.web.tests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,31 +13,20 @@ import org.springframework.web.util.UriUtils;
 import ru.anr.base.facade.web.api.RestClient;
 import ru.anr.base.web.config.samples.WebApplication;
 
+import java.util.Objects;
+
 /**
  * Sample JUnit test for demonstrating WebDriver extension Selenide.
  *
  * @author Alexey Romanchuk
  * @created Nov 24, 2014
  */
-@SpringBootTest(classes = WebApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(
+        classes = WebApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
+)
 public class WebTest extends BaseWebTestCase {
 
-    /**
-     * Use case: loading the main page and checking its localization and absence
-     * of JavaScript errors
-     */
-    @Test
-    public void load() {
-
-        Selenide.open("http://localhost:" + port);
-
-        Assertions.assertEquals("Hello, world!", Selenide.$(By.id("txt")).getText());
-
-        Selenide.open("http://localhost:" + port + "/?locale = ru_RU");
-
-        Assertions.assertEquals("Привет, мир!", Selenide.$(By.id("txt")).getText());
-        Selenide.$(By.id("txt")).shouldHave(Condition.text("Привет, мир!"));
-    }
 
     /**
      * A JSON to check
@@ -63,29 +48,46 @@ public class WebTest extends BaseWebTestCase {
     @Test
     public void loadJSON() {
         Selenide.open("http://localhost:" + port + "/api/v1/datas");
-        Assertions.assertEquals(JSON.replaceAll(" ", ""), Selenide.getFocusedElement().getText().replaceAll(" ", ""));
+        Assertions.assertEquals(
+                JSON.replaceAll(" ", ""),
+                Objects.requireNonNull(Selenide.getFocusedElement()).getText().replaceAll(" ", ""));
+    }
+
+    private static final String CONFIG_JSON = "{\"props\":{\"buildnumber\":\"1\"," +
+            "\"version\":\"0.0.0\",\"production\":false,\"profiles\":[\"developers\"]}}";
+
+    /**
+     * Use case: checks configuration loading
+     */
+    @Test
+    public void loadConfig() {
+        Selenide.open("http://localhost:" + port + "/config");
+        Assertions.assertEquals(CONFIG_JSON.replaceAll(" ", ""),
+                Objects.requireNonNull(Selenide.getFocusedElement()).getText().replaceAll(" ", ""));
     }
 
     /**
-     * Checking navigation via Angular Route
+     * Doing some Angular click.
      */
     @Test
-    public void angularClick() {
+    public void localeCheck() {
 
         Selenide.open("http://localhost:" + port);
-        Selenide.$(By.tagName("h3")).should(Condition.text(""));
 
-        Selenide.$(By.id("lnk")).click();
-        Assertions.assertEquals(JSON.replaceAll(" ", ""), Selenide.$(By.tagName("h3")).getText().replaceAll(" ", ""));
+        Assertions.assertEquals("Name", Selenide.$(By.id("txt")).getText());
+        Assertions.assertEquals("Hello, world!", Selenide.$(By.id("txt_server")).getText());
+
+        Selenide.$(By.id("lnk_ru")).click();
+        Assertions.assertEquals("Имя", Selenide.$(By.id("txt")).getText());
+        Assertions.assertEquals("Привет, мир!", Selenide.$(By.id("txt_server")).getText());
     }
 
     /**
      * Sends a file with the specified name
      *
      * @param fileName The name of a file
-     * @return A response
      */
-    private ResponseEntity<String> sendFile(String fileName) {
+    private void sendFile(String fileName) {
 
         RestClient r = new RestClient();
 
@@ -96,18 +98,16 @@ public class WebTest extends BaseWebTestCase {
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         HttpEntity<LinkedMultiValueMap<String, Object>> entity =
-                new HttpEntity<LinkedMultiValueMap<String, Object>>(map, headers);
+                new HttpEntity<>(map, headers);
 
-        return r.exchange("/api/v1/files", HttpMethod.POST, entity, String.class);
-
+        r.exchange("/api/v1/files", HttpMethod.POST, entity, String.class);
     }
 
     /**
-     * Use case: checks loading JSON fragments
+     * Use case: checks uploading files and checking the upload size restrictions.
      */
     @Test
     public void upload() {
-
         try {
             sendFile("web-context.xml");
         } catch (HttpClientErrorException ex) {

@@ -1,6 +1,5 @@
 package ru.anr.base.web.config.samples;
 
-import org.apache.jasper.servlet.JspServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -10,53 +9,43 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.boot.context.ApplicationPidFileWriter;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.bind.annotation.RestController;
-import ru.anr.base.BaseParent;
-import ru.anr.base.web.samples.api.IndexController;
-import ru.anr.base.web.samples.api.MockApiController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import ru.anr.base.services.BaseService;
+import ru.anr.base.services.BaseServiceImpl;
 
 import javax.annotation.PostConstruct;
 
 /**
- * Main entry point for the application. Uses configs from oauth2 sso and
- * microservices infrastructure from Spring Boot stack.
+ * The main entry point for the application.
  *
  * @author Alexey Romanchuk
  * @created Mar 11, 2015
  */
 @Configuration
-@RestController
 @ImportResource("classpath:web-context.xml")
-@ComponentScan(basePackageClasses = {IndexController.class, MockApiController.class})
 @SpringBootApplication(exclude = {
         DataSourceAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class,
         WebMvcAutoConfiguration.class
 })
-//@EnableZuulProxy
+@EnableWebMvc
+//@EnableZuulProxy  // Must be enabled when doing local development in the Angular app
 public class WebApplication extends WebSecurityConfigurerAdapter {
 
-    /**
-     * The logger
-     */
     private static final Logger logger = LoggerFactory.getLogger(WebApplication.class);
 
-    /**
-     * Writing the App versions
-     */
     @PostConstruct
     public void logStarted() {
         logger.info("WEB Application started");
     }
 
+    // TODO: migrate the security configuration from WebSecurityConfigurerAdapter
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests().anyRequest().anonymous();
@@ -79,6 +68,11 @@ public class WebApplication extends WebSecurityConfigurerAdapter {
         app.run(args);
     }
 
+    @Bean("service")
+    public BaseService service() {
+        return new BaseServiceImpl();
+    }
+
     /**
      * Session event publisher definition
      *
@@ -87,15 +81,5 @@ public class WebApplication extends WebSecurityConfigurerAdapter {
     @Bean
     public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
         return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
-    }
-
-    //@Bean
-    public ServletRegistrationBean<JspServlet> customServletBean() {
-
-        ServletRegistrationBean<JspServlet> bean = new ServletRegistrationBean<>(new JspServlet(), "/*");
-        bean.setLoadOnStartup(3);
-        bean.setInitParameters(BaseParent.toMap("httpMethods", "GET"));
-
-        return bean;
     }
 }

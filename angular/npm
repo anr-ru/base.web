@@ -1,0 +1,4 @@
+#!/bin/sh
+
+export PATH=./nodes/node/:./node_modules/.bin:$PATH
+npm "$@"

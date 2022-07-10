@@ -7,9 +7,8 @@
         </encoder>
     </appender>
 
-    <logger name="org.springframework" level="DEBUG"/>
-
-    <logger name="ru.anr" level="DEBUG"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="ru.anr" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

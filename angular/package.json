@@ -6,7 +6,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --public-host http://localhost:4200",
-    "build": "ng build --aot=false --build-optimizer=false --prod --configuration=production --output-path=../public",
+    "build": "ng build --aot=false --build-optimizer=false --prod --configuration=production --output-path=../target/test-classes/static",
     "lint": "ng lint"
   },
   "private": true,
