@@ -16,8 +16,9 @@
 
 package ru.anr.base.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -37,8 +38,9 @@ import org.springframework.web.servlet.view.JstlView;
  * @author Alexey Romanchuk
  * @created Nov 24, 2014
  */
-@Configuration
 public class MvcConfig implements WebMvcConfigurer, ResourceLocator {
+
+    private static final Logger logger = LoggerFactory.getLogger(MvcConfig.class);
 
     // The classpath-related location of html/jsp templates
     private String templatesRoot = "/static/";
@@ -105,6 +107,7 @@ public class MvcConfig implements WebMvcConfigurer, ResourceLocator {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         Resource locations = this.getPath("");
+        logger.debug("Building resource handlers {}", locations);
         registry.addResourceHandler("/**")
                 .addResourceLocations(locations)
                 .setCachePeriod(cachePeriod)
@@ -114,6 +117,7 @@ public class MvcConfig implements WebMvcConfigurer, ResourceLocator {
 
     @Override
     public Resource getPath(String resource) {
+        logger.debug("Requesting a classpath resource {}/{}", this.templatesRoot, resource);
         return new ClassPathResource(this.templatesRoot + resource);
     }
 
