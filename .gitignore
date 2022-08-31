@@ -1,12 +1,11 @@
 /target
-
 /.settings
 .pmd
 .project
 .classpath
 *.log
 /.idea/
-/base.web.iml
+*.iml
 nodes
 node_modules
 /public/
