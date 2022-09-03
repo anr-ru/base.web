@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
+
     <parent>
         <groupId>ru.anr</groupId>
         <artifactId>base.platform.parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </parent>
-    
+
     <artifactId>base.web</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
     <name>Base Web Application</name>
-    
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -33,14 +33,14 @@
                 <executions>
                     <execution>
                         <phase>package</phase>
-                        <goals>                            
+                        <goals>
                             <goal>test-jar</goal>
                         </goals>
                         <configuration>
                             <includes>
                                 <include>**/BaseWebTestCase*</include>
                             </includes>
-                           <skip>false</skip>
+                            <skip>false</skip>
                         </configuration>
                     </execution>
                 </executions>
@@ -78,9 +78,9 @@
                         <configuration>
                             <srcdir>${basedir}/src/test/resources/static/</srcdir>
                             <triggerfiles>
-                              <triggerfile>${project.build.directory}/gruntFile.js</triggerfile>
-                              <triggerfile>${project.build.directory}/package.json</triggerfile>
-                            </triggerfiles> 
+                                <triggerfile>${project.build.directory}/gruntFile.js</triggerfile>
+                                <triggerfile>${project.build.directory}/package.json</triggerfile>
+                            </triggerfiles>
                             <arguments>--verbose ${target.environment}</arguments>
                         </configuration>
                     </execution>
@@ -96,7 +96,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>                
+            </plugin>
         </plugins>
     </build>
 
@@ -113,18 +113,18 @@
     </dependencyManagement>
 
     <dependencies>
-    
+
         <!-- internal -->
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.services</artifactId>
-            <version>1.0.0</version>
+            <version>${base.services.version}</version>
         </dependency>
         <!-- TESTS -->
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.facade</artifactId>
-            <version>1.0.0</version>
+            <version>${base.facade.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -168,7 +168,7 @@
         <dependency>
             <groupId>ru.anr</groupId>
             <artifactId>base.tests</artifactId>
-            <version>1.0.0</version>
+            <version>${base.tests.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -184,13 +184,17 @@
     <properties>
         <spring.cloud.version>1.0.0.RELEASE</spring.cloud.version>
         <spring.version>4.1.5.RELEASE</spring.version>
-        
+
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
         <node.version>v8.11.3</node.version>
         <npm.version>6.4.0</npm.version>
-        
+
         <selenide.browser>phantomjs</selenide.browser>
-        
+
+        <base.tests.version>1.2.0</base.tests.version>
+        <base.facade.version>1.2.0</base.facade.version>
+        <base.services.version>1.2.0</base.services.version>
+
     </properties>
-    
+
 </project>
