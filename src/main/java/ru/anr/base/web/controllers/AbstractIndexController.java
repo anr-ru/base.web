@@ -85,7 +85,7 @@ public abstract class AbstractIndexController extends BaseSpringParent {
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String getPageData(Map<String, Object> model) {
 
-        logger.info("Profiles: {}", getProfiles());
+        logger.debug("Profiles: {}", getProfiles());
 
         model.put("production", isProdMode());
         model.put("buildnumber", build);
