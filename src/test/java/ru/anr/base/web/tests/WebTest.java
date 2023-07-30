@@ -1,59 +1,32 @@
-/**
- * 
- */
 package ru.anr.base.web.tests;
 
-import java.io.UnsupportedEncodingException;
-
-import org.junit.Assert;
-import org.junit.Test;
+import com.codeborne.selenide.Selenide;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.util.UriUtils;
-
 import ru.anr.base.facade.web.api.RestClient;
-import ru.anr.base.web.samples.config.WebApplication;
+import ru.anr.base.web.config.samples.WebApplication;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
+import java.util.Objects;
 
 /**
  * Sample JUnit test for demonstrating WebDriver extension Selenide.
  *
- *
  * @author Alexey Romanchuk
  * @created Nov 24, 2014
- *
  */
-@SpringApplicationConfiguration(classes = WebApplication.class)
+@SpringBootTest(
+        classes = WebApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT
+)
 public class WebTest extends BaseWebTestCase {
 
-    /**
-     * Use case: loading the main page and checking its localization and absence
-     * of JavaScript errors
-     */
-    @Test
-    public void load() {
-
-        Selenide.open("http://localhost:8080");
-        Selenide.assertNoJavascriptErrors();
-
-        Assert.assertEquals("Hello, world!", Selenide.$(By.id("txt")).getText());
-
-        Selenide.open("http://localhost:8080/?locale=ru_RU");
-
-        Assert.assertEquals("Привет, мир!", Selenide.$(By.id("txt")).getText());
-        Selenide.$(By.id("txt")).shouldHave(Condition.text("Привет, мир!"));
-    }
 
     /**
      * A JSON to check
@@ -74,32 +47,58 @@ public class WebTest extends BaseWebTestCase {
      */
     @Test
     public void loadJSON() {
+        Selenide.open("http://localhost:" + port + "/api/v1/datas");
+        Assertions.assertEquals(
+                JSON.replaceAll(" ", ""),
+                Objects.requireNonNull(Selenide.getFocusedElement()).getText().replaceAll(" ", ""));
+    }
 
-        Selenide.open("http://localhost:8080/api/v1/datas");
-        Assert.assertEquals(JSON.replaceAll(" ", ""), Selenide.getFocusedElement().getText().replaceAll(" ", ""));
+    private static final String CONFIG_JSON = "{\"props\":{\"buildnumber\":\"1\"," +
+            "\"version\":\"0.0.0\",\"production\":false,\"profiles\":[\"developers\"]}}";
+
+    /**
+     * Use case: checks configuration loading
+     */
+    @Test
+    public void loadConfig() {
+        Selenide.open("http://localhost:" + port + "/config");
+        Assertions.assertEquals(CONFIG_JSON.replaceAll(" ", ""),
+                Objects.requireNonNull(Selenide.getFocusedElement()).getText().replaceAll(" ", ""));
     }
 
     /**
-     * Checking navigation via Angular Route
+     * Use case: get favicon
      */
     @Test
-    public void angularClick() {
+    public void loadFavIcon() {
+        RestClient r = new RestClient();
 
-        Selenide.open("http://localhost:8080");
-        Selenide.$(By.tagName("h3")).should(Condition.text(""));
+        ResponseEntity<String> icon = r.get("/favicon.ico");
+        Assertions.assertEquals(icon.getBody(), readAsString("/static/assets/favicon.ico"));
+    }
 
-        Selenide.$(By.id("lnk")).click();
-        Assert.assertEquals(JSON.replaceAll(" ", ""), Selenide.$(By.tagName("h3")).getText().replaceAll(" ", ""));
+    /**
+     * Doing some Angular click.
+     */
+    @Test
+    public void localeCheck() {
+
+        Selenide.open("http://localhost:" + port);
+
+        Assertions.assertEquals("Name", Selenide.$(By.id("txt")).getText());
+        Assertions.assertEquals("Hello, world!", Selenide.$(By.id("txt_server")).getText());
+
+        Selenide.$(By.id("lnk_ru")).click();
+        Assertions.assertEquals("Имя", Selenide.$(By.id("txt")).getText());
+        Assertions.assertEquals("Привет, мир!", Selenide.$(By.id("txt_server")).getText());
     }
 
     /**
      * Sends a file with the specified name
-     * 
-     * @param fileName
-     *            The name of a file
-     * @return A response
+     *
+     * @param fileName The name of a file
      */
-    private ResponseEntity<String> sendFile(String fileName) {
+    private void sendFile(String fileName) {
 
         RestClient r = new RestClient();
 
@@ -110,28 +109,22 @@ public class WebTest extends BaseWebTestCase {
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
         HttpEntity<LinkedMultiValueMap<String, Object>> entity =
-                new HttpEntity<LinkedMultiValueMap<String, Object>>(map, headers);
+                new HttpEntity<>(map, headers);
 
-        return r.exchange("/api/v1/files", HttpMethod.POST, entity, String.class);
-
+        r.exchange("/api/v1/files", HttpMethod.POST, entity, String.class);
     }
 
     /**
-     * Use case: checks loading JSON fragments
+     * Use case: checks uploading files and checking the upload size restrictions.
      */
     @Test
     public void upload() {
-
         try {
             sendFile("web-context.xml");
         } catch (HttpClientErrorException ex) {
-            Assert.assertEquals(HttpStatus.PAYLOAD_TOO_LARGE, ex.getStatusCode());
-            try {
-                Assert.assertEquals("The file size exceeds: 1Kb",
-                        UriUtils.decode(ex.getResponseBodyAsString(), "utf-8"));
-            } catch (UnsupportedEncodingException e) {
-                // ignore
-            }
+            Assertions.assertEquals(HttpStatus.PAYLOAD_TOO_LARGE, ex.getStatusCode());
+            Assertions.assertEquals("The file size exceeds: 1Kb",
+                    UriUtils.decode(ex.getResponseBodyAsString(), "utf-8"));
         }
 
         // The file with a normal size

@@ -2,38 +2,35 @@ sudo: false
 dist: trusty
 language: java
 jdk:
-  - oraclejdk8
-
-services:
-- docker
+  - openjdk11
 
 cache:
   directories:
-  - "$HOME/.cache"
+    - "$HOME/.cache"
 
 before_install:
   - cp ./.mvn/ci-settings.xml $HOME/.m2/settings.xml
+  - wget --no-check-certificate https://dlcdn.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+  - tar xzvf apache-maven-3.6.3-bin.tar.gz
+  - export PATH=`pwd`/apache-maven-3.6.3/bin:$PATH
+  - mvn -v
   - stty cols 80
-  - wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+  - wget https://bitbucket.org/anr-ru/docker-sources/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
   - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
   - sudo rm -rf /usr/local/phantomjs
   - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
-  - wget -P $HOME https://downloads.apache.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
-  - tar xzvf $HOME/apache-maven-3.6.3-bin.tar.gz -C $HOME
-  - export PATH=$HOME/apache-maven-3.6.3/bin:$PATH
-  - mvn -v
-
-script:
-  -  "mvn -B -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs -Dversioning.disable=false"
 
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
 
-deploy:
-  - provider: script
-    script: "mvn -P ci deploy -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs -Dversioning.disable=false"
-    skip_cleanup: false
-    on:
-      tags: true
+jobs:
+  include:
+    - script: "mvn -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs"
+    - stage: deploy
+      provider: script
+      script: "mvn -P ci deploy -DskipTests -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs"
+      on:
+        tags: true
+        branch: master
