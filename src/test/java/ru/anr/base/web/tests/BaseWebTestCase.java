@@ -12,7 +12,7 @@ import ru.anr.base.tests.BaseTestCase;
 import java.util.logging.Level;
 
 /**
- * Base test case class for Using Selenide framework in tests.
+ * Base test case class for Using a Selenide framework in tests.
  *
  * @author Alexey Romanchuk
  * @created Nov 26, 2014
@@ -36,10 +36,5 @@ public class BaseWebTestCase extends BaseTestCase {
         Configuration.webdriverLogsEnabled = true;
         Configuration.timeout = 10000;
         Configuration.holdBrowserOpen = false;
-
-        // Not sure if it works for PhantomJS
-        LoggingPreferences prefs = new LoggingPreferences();
-        prefs.enable(LogType.BROWSER, Level.ALL);
-        Configuration.browserCapabilities.setCapability(CapabilityType.LOGGING_PREFS, prefs);
     }
 }
