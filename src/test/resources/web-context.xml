@@ -9,7 +9,6 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <context:property-placeholder location="classpath:application.properties"/>
     <context:component-scan base-package="ru.anr.base.web.samples"/>
 
     <bean class="ru.anr.base.web.WebInitializer"/>

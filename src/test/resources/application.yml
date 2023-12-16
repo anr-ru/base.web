@@ -1,0 +1,54 @@
+application:
+  version: 0.0.0
+  build: 1
+
+server:
+  compression:
+    enabled: false
+  servlet:
+    session:
+      timeout: 3600
+  port: 8080
+
+security:
+  sessions: always
+
+multipart:
+  fileSizeThreshold: 0
+  maxFileSize: 10MB
+  maxRequestSize: 20MB
+
+logging:
+  config: ./src/test/resources/logback-test.xml
+
+spring:
+  session:
+    timeout: 36000
+  profiles:
+    active: developers
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  template:
+    caching: false
+    cache-period: 0
+  security:
+    oauth2:
+      client:
+        registration:
+          sample:
+            client-id: kbyuFDidLLm280LIwVFiazOqjO3ty8KH
+            client-secret: 60Op4HFM0I8ajz0WdiStAbziZ-VFQttXuxixHHs2R7r7-CW8GR79l-mmLqMhc-Sa
+            redirect-uri: http://127.0.0.1:${server.port}/login/oauth2/code/{registrationId}
+            scope: openid, profile, email, phone, address
+        provider:
+          sample:
+            authorization-uri: https://samples.auth0.com/authorize
+            token-uri: https://samples.auth0.com/oauth/token
+
+zuul:
+  ignored-services: /api/**
+  routes:
+    main:
+      path: /**/*.*
+      url: http://127.0.0.1:4200
