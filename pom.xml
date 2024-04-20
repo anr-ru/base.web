@@ -235,46 +235,36 @@
             <artifactId>selenide</artifactId>
             <version>${selenide.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.codeborne</groupId>
-            <artifactId>phantomjsdriver</artifactId>
-            <version>${phantomjs.driver.version}</version>
-            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-java</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-remote-driver</artifactId>
             <version>${selenium.version}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.seleniumhq.selenium</groupId>
-                    <artifactId>selenium-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.seleniumhq.selenium</groupId>
-                    <artifactId>selenium-remote-driver</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.seleniumhq.selenium</groupId>
-                    <artifactId>selenium-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-api</artifactId>
             <scope>test</scope>
             <version>${selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -285,15 +275,14 @@
 
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
 
-        <selenium.version>4.3.0</selenium.version>
-        <selenide.version>6.6.5</selenide.version>
+        <selenium.version>4.19.1</selenium.version>
+        <selenide.version>7.2.3</selenide.version>
 
         <base.services.version>2.6.1</base.services.version>
         <base.facade.version>2.6.1</base.facade.version>
         <base.tests.version>2.6.1</base.tests.version>
 
         <spring.cloud.version>2.2.10.RELEASE</spring.cloud.version>
-        <phantomjs.driver.version>1.5.0</phantomjs.driver.version>
         <javax.servlet.jsp.version>1.2.2</javax.servlet.jsp.version>
         <servlet.version>4.0.1</servlet.version>
         <httpclient.version>4.5.14</httpclient.version>
@@ -301,6 +290,8 @@
         <slf4j.version>1.7.36</slf4j.version>
         <logback.version>1.2.13</logback.version>
         <jul-to-slf4j.version>1.7.36</jul-to-slf4j.version>
+
+        <java.version>17</java.version>
 
     </properties>
 

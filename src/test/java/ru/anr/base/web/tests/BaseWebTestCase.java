@@ -2,14 +2,8 @@ package ru.anr.base.web.tests;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
-import org.openqa.selenium.logging.LogType;
-import org.openqa.selenium.logging.LoggingPreferences;
-import org.openqa.selenium.phantomjs.PhantomJSDriver;
-import org.openqa.selenium.remote.CapabilityType;
 import org.springframework.beans.factory.annotation.Value;
 import ru.anr.base.tests.BaseTestCase;
-
-import java.util.logging.Level;
 
 /**
  * Base test case class for Using a Selenide framework in tests.
@@ -30,7 +24,8 @@ public class BaseWebTestCase extends BaseTestCase {
     public void setUp() {
         super.setUp();
 
-        System.setProperty("selenide.browser", PhantomJSDriver.class.getName());
+        System.setProperty("selenide.browser", "Chrome");
+
         Configuration.reportsFolder = "target/screenshots";
         Configuration.downloadsFolder = "target/downloads";
         Configuration.webdriverLogsEnabled = true;

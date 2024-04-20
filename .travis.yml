@@ -2,7 +2,10 @@ sudo: false
 dist: trusty
 language: java
 jdk:
-  - openjdk11
+  - openjdk17
+
+addons:
+  chrome: stable
 
 cache:
   directories:
@@ -15,10 +18,10 @@ before_install:
   - export PATH=`pwd`/apache-maven-3.9.3/bin:$PATH
   - mvn -v
   - stty cols 80
-  - wget https://bitbucket.org/anr-ru/docker-sources/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-  - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
-  - sudo rm -rf /usr/local/phantomjs
-  - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
+#  - wget https://bitbucket.org/anr-ru/docker-sources/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+#  - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
+#  - sudo rm -rf /usr/local/phantomjs
+#  - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
 
 before_script:
   - "export DISPLAY=:99.0"
@@ -27,10 +30,10 @@ before_script:
 
 jobs:
   include:
-    - script: "mvn -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs"
+    - script: "mvn -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=Chrome"
     - stage: deploy
       provider: script
-      script: "mvn -P ci deploy -DskipTests -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=phantomjs"
+      script: "mvn -P ci deploy -DskipTests -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=Chrome"
       on:
         tags: true
         branches: true
