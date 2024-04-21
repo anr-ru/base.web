@@ -18,6 +18,12 @@ before_install:
   - export PATH=`pwd`/apache-maven-3.9.3/bin:$PATH
   - mvn -v
   - stty cols 80
+  - wget -N https://chromedriver.storage.googleapis.com/100.0.4896.20/chromedriver_linux64.zip -P ~/
+  - unzip ~/chromedriver_linux64.zip -d ~/
+  - rm ~/chromedriver_linux64.zip
+  - sudo mv -f ~/chromedriver /usr/local/share/
+  - sudo chmod +x /usr/local/share/chromedriver
+  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
 #  - wget https://bitbucket.org/anr-ru/docker-sources/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
 #  - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
 #  - sudo rm -rf /usr/local/phantomjs
@@ -30,10 +36,10 @@ before_script:
 
 jobs:
   include:
-    - script: "mvn -P ci install -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=Chrome"
+    - script: "mvn -P ci install -Dselenide.browser=Chrome"
     - stage: deploy
       provider: script
-      script: "mvn -P ci deploy -DskipTests -Dphantomjs.binary.path=/usr/local/phantomjs/bin/phantomjs -Dselenide.browser=Chrome"
+      script: "mvn -P ci deploy -DskipTests -Dselenide.browser=Chrome"
       on:
         tags: true
         branches: true
