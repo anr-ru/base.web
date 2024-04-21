@@ -5,11 +5,7 @@ jdk:
   - openjdk17
 
 addons:
-  apt:
-    sources:
-      - google-chrome
-    packages:
-      - google-chrome-stable
+  chrome: stable
 
 cache:
   directories:
@@ -22,16 +18,20 @@ before_install:
   - export PATH=`pwd`/apache-maven-3.9.3/bin:$PATH
   - mvn -v
   - stty cols 80
-  - wget -N https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -P ~/
-  - unzip ~/chromedriver_linux64.zip -d ~/
-  - rm ~/chromedriver_linux64.zip
-  - sudo mv -f ~/chromedriver /usr/local/share/
-  - sudo chmod +x /usr/local/share/chromedriver
-  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
-#  - wget https://bitbucket.org/anr-ru/docker-sources/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
-#  - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
-#  - sudo rm -rf /usr/local/phantomjs
-#  - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
+  - CHROME_MAIN_VERSION=`google-chrome-stable --version | sed -E 's/(^Google Chrome |\.[0-9]+ )//g'`
+  - CHROMEDRIVER_VERSION=`curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAIN_VERSION"`
+  - curl "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -O
+  - unzip chromedriver_linux64.zip -d ~/bin
+    #- wget -N https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -P ~/
+    #  - unzip ~/chromedriver_linux64.zip -d ~/
+    #  - rm ~/chromedriver_linux64.zip
+    #  - sudo mv -f ~/chromedriver /usr/local/share/
+    #  - sudo chmod +x /usr/local/share/chromedriver
+    #  - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+    #  - wget https://bitbucket.org/anr-ru/docker-sources/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+    #  - tar -xf phantomjs-2.1.1-linux-x86_64.tar.bz2
+    #  - sudo rm -rf /usr/local/phantomjs
+  #  - sudo mv phantomjs-2.1.1-linux-x86_64 /usr/local/phantomjs
 
 before_script:
   - "export DISPLAY=:99.0"
