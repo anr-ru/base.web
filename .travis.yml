@@ -2,7 +2,7 @@ sudo: false
 dist: trusty
 language: java
 jdk:
-  - openjdk17
+  - openjdk11
 
 addons:
   chrome: stable
@@ -25,7 +25,7 @@ before_install:
   - unzip chromedriver_linux64.zip -d /usr/local/share/
     #- wget -N https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip -P ~/
     #  - unzip ~/chromedriver_linux64.zip -d ~/
-    #  - rm ~/chromedriver_linux64.zip
+  #  - rm ~/chromedriver_linux64.zip
   #  - sudo mv -f ~/chromedriver /usr/local/share/
   - sudo chmod +x /usr/local/share/chromedriver
   - sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
