@@ -275,9 +275,9 @@
 
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
 
-        <selenium.version>4.19.1</selenium.version>
-        <selenide.version>7.2.3</selenide.version>
-
+        <selenium.version>4.13.0</selenium.version>
+        <selenide.version>6.19.1</selenide.version>
+        
         <base.services.version>2.6.1</base.services.version>
         <base.facade.version>2.6.1</base.facade.version>
         <base.tests.version>2.6.1</base.tests.version>
