@@ -2,6 +2,7 @@ package ru.anr.base.web.tests;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Value;
 import ru.anr.base.tests.BaseTestCase;
 
@@ -31,5 +32,8 @@ public class BaseWebTestCase extends BaseTestCase {
         Configuration.webdriverLogsEnabled = true;
         Configuration.timeout = 10000;
         Configuration.holdBrowserOpen = false;
+
+        Configuration.browserCapabilities =
+                new ChromeOptions().addArguments("--no-sandbox");
     }
 }
