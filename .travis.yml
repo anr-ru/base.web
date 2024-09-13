@@ -23,7 +23,7 @@ before_install:
   #- CHROMEDRIVER_VERSION=`curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAIN_VERSION"`
   #- curl "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -O
   #- unzip chromedriver_linux64.zip -d /usr/local/share/
-  - wget -N https://chromedriver.storage.googleapis.com/62.0.3202.94/chromedriver_linux64.zip -P ~/
+  - wget -N https://chromedriver.storage.googleapis.com/80.0.3987.106/chromedriver_linux64.zip -P ~/
   - unzip ~/chromedriver_linux64.zip -d ~/
   - rm ~/chromedriver_linux64.zip
   - sudo mv -f ~/chromedriver /usr/local/share/
