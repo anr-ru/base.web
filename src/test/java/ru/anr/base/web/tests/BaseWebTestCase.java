@@ -34,6 +34,6 @@ public class BaseWebTestCase extends BaseTestCase {
         Configuration.holdBrowserOpen = false;
 
         Configuration.browserCapabilities =
-                new ChromeOptions().addArguments("--no-sandbox");
+                new ChromeOptions().addArguments("--no-sandbox", "--disable-dev-shm-usage");
     }
 }
