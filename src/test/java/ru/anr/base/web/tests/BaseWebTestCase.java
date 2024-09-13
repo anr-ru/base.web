@@ -33,7 +33,11 @@ public class BaseWebTestCase extends BaseTestCase {
         Configuration.timeout = 10000;
         Configuration.holdBrowserOpen = false;
 
-        Configuration.browserCapabilities =
-                new ChromeOptions().addArguments("--no-sandbox", "--disable-dev-shm-usage");
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--remote-debugging-pipe");
+
+        Configuration.browserCapabilities = options;
     }
 }
