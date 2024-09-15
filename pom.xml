@@ -64,14 +64,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
-                <configuration>
-                    <useSystemClassLoader>false</useSystemClassLoader>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${frontend-maven-plugin.version}</version>
@@ -133,20 +125,13 @@
                     </filesets>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+            </plugin>
         </plugins>
     </build>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${spring-boot.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
 
@@ -156,6 +141,14 @@
             <artifactId>base.services</artifactId>
             <version>${base.services.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- TESTS -->
         <dependency>
             <groupId>org.anrruf</groupId>
@@ -229,47 +222,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- WebDriver extension -->
+        <!-- For reason, this dependency is required for proper launching tests -->
         <dependency>
-            <groupId>com.codeborne</groupId>
-            <artifactId>selenide</artifactId>
-            <version>${selenide.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.seleniumhq.selenium</groupId>
-                    <artifactId>selenium-java</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-remote-driver</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <scope>test</scope>
-            <version>${selenium.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chrome-driver</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-chromium-driver</artifactId>
-            <version>${selenium.version}</version>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>1.11.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -280,22 +237,24 @@
         <app.dir>${basedir}/angular/</app.dir>
 
         <spring-boot.version>2.3.12.RELEASE</spring-boot.version>
-
-        <selenium.version>4.13.0</selenium.version>
-        <selenide.version>6.19.1</selenide.version>
-        
-        <base.services.version>2.6.1</base.services.version>
-        <base.facade.version>2.6.1</base.facade.version>
-        <base.tests.version>2.6.1</base.tests.version>
-
         <spring.cloud.version>2.2.10.RELEASE</spring.cloud.version>
         <javax.servlet.jsp.version>1.2.2</javax.servlet.jsp.version>
         <servlet.version>4.0.1</servlet.version>
         <httpclient.version>4.5.14</httpclient.version>
 
+        <selenide.version>6.19.1</selenide.version>
+
+        <base.services.version>2.6.1</base.services.version>
+        <base.facade.version>2.6.1</base.facade.version>
+        <base.tests.version>2.6.1</base.tests.version>
+
+
         <slf4j.version>1.7.36</slf4j.version>
         <logback.version>1.2.13</logback.version>
         <jul-to-slf4j.version>1.7.36</jul-to-slf4j.version>
+
+        <maven-surefire-plugin.version>3.5.0</maven-surefire-plugin.version>
+        <junit.version>5.11.0</junit.version>
 
     </properties>
 
