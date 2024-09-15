@@ -16,9 +16,9 @@ before_install:
   - wget --no-check-certificate https://archive.apache.org/dist/maven/maven-3/3.9.3/binaries/apache-maven-3.9.3-bin.tar.gz
   - tar xzvf apache-maven-3.9.3-bin.tar.gz
   - export PATH=`pwd`/apache-maven-3.9.3/bin:$PATH
-  - mvn -v
   - stty cols 80
   - google-chrome-stable --version
+  - sudo apt-get build-dep x11vnc
   #- CHROME_MAIN_VERSION=`google-chrome-stable --version | sed -E 's/(^Google Chrome |\.[0-9]+ )//g'`
   #- CHROMEDRIVER_VERSION=`curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAIN_VERSION"`
   #- curl "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" -O
