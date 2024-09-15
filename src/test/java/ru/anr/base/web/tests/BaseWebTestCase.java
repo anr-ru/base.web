@@ -38,7 +38,7 @@ public class BaseWebTestCase extends BaseTestCase {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--remote-debugging-pipe");
+        options.addArguments("--headless");
 
         Configuration.browserCapabilities = options;
     }
