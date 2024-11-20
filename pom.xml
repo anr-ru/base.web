@@ -288,8 +288,8 @@
         <selenium.version>4.3.0</selenium.version>
         <selenide.version>6.6.5</selenide.version>
 
-        <base.services.version>2.6.1</base.services.version>
-        <base.facade.version>2.6.1</base.facade.version>
+        <base.services.version>2.6.2</base.services.version>
+        <base.facade.version>2.6.2</base.facade.version>
         <base.tests.version>2.6.1</base.tests.version>
 
         <spring.cloud.version>2.2.10.RELEASE</spring.cloud.version>
